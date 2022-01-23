@@ -1,0 +1,5 @@
+package edu.duke.ph139.battleship;
+
+public class BoardTextView {
+
+}
