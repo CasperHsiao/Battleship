@@ -60,7 +60,7 @@ public class BoardTextView {
     StringBuilder ans = new StringBuilder();
     char BaseCharacter = 'A';
     for (int i = 0; i < toDisplay.getHeight(); i++) {
-      char rowCharacter = (char) ('A' + i);
+      char rowCharacter = (char) (BaseCharacter + i);
       ans.append(rowCharacter + " ");
       String sep = "";
       for (int j = 0; j < toDisplay.getWidth(); j++) {
