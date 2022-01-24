@@ -31,7 +31,7 @@ public class BoardTextView {
    * @return the String that is the empty board view for the given board
    */
   public String displayMyOwnBoard() {
-    return makeHeader() + makeEmptyBody() + makeHeader();
+    return makeHeader() + makeBody() + makeHeader();
   }
 
   /**
@@ -52,11 +52,11 @@ public class BoardTextView {
   }
 
   /**
-   * This makes the empty body, e.g. "A | | A\n" + "B | | B\n"
+   * This makes the body, e.g. "A | | A\n" + "B | | B\n"
    * 
-   * @return the String that is the empty body for the given board
+   * @return the String that is the body for the given board
    */
-  String makeEmptyBody() {
+  String makeBody() {
     StringBuilder ans = new StringBuilder();
     char BaseCharacter = 'A';
     for (int i = 0; i < toDisplay.getHeight(); i++) {
@@ -65,7 +65,13 @@ public class BoardTextView {
       String sep = "";
       for (int j = 0; j < toDisplay.getWidth(); j++) {
         ans.append(sep);
-        ans.append(" ");
+        Coordinate c = new Coordinate(i, j);
+        Character info = toDisplay.whatIsAt(c);
+        if (info != null) {
+          ans.append(info);
+        } else {
+          ans.append(" ");
+        }
         sep = "|";
       }
       ans.append(" " + rowCharacter + "\n");

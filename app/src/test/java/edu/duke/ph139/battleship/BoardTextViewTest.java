@@ -31,7 +31,6 @@ public class BoardTextViewTest {
     Board<Character> b1 = new BattleShipBoard<Character>(w, h);
     BoardTextView view = new BoardTextView(b1);
     assertEquals(expectedHeader, view.makeHeader());
-    assertEquals(expectedBody, view.makeEmptyBody());
     String expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(expected, view.displayMyOwnBoard());
   }
@@ -43,4 +42,30 @@ public class BoardTextViewTest {
     emptyBoardHelper(3, 5, expectedHeader, expectedBody);
   }
 
+  @Test
+  public void test_display_non_empty_4by3() {
+    Board<Character> b1 = new BattleShipBoard<>(4, 3);
+    BoardTextView view = new BoardTextView(b1);
+    Coordinate c1 = new Coordinate(1, 2);
+    Coordinate c2 = new Coordinate(0, 2);
+    Coordinate c3 = new Coordinate(2, 0);
+    Coordinate c4 = new Coordinate(2, 1);
+    Ship<Character> s1 = new BasicShip(c1);
+    Ship<Character> s2 = new BasicShip(c2);
+    Ship<Character> s3 = new BasicShip(c3);
+    Ship<Character> s4 = new BasicShip(c4);
+    assertEquals(b1.tryAddShip(s1), true);
+    assertEquals(b1.tryAddShip(s2), true);
+    String expectedHeader = "  0|1|2|3\n";
+    String expectedBody = "A  | |s|  A\n" + "B  | |s|  B\n" + "C  | | |  C\n";
+    String expected = expectedHeader + expectedBody + expectedHeader;
+    assertEquals(expected, view.displayMyOwnBoard());
+    assertEquals(b1.tryAddShip(s3), true);
+    assertEquals(b1.tryAddShip(s4), true);
+    Character[][] expectedArray = { { null, null, 's', null}, { null, null, 's', null}, { 's', 's', null, null}};
+    expectedBody = "A  | |s|  A\n" + "B  | |s|  B\n" + "C s|s| |  C\n";
+    expected = expectedHeader + expectedBody + expectedHeader;
+    assertEquals(expected, view.displayMyOwnBoard());
+    
+   }
 }
