@@ -11,6 +11,11 @@ public class PlacementTest {
     assertEquals(1, p1.getWhere().getRow());
     assertEquals(3, p1.getWhere().getColumn());
     assertEquals('V', p1.getOrientation());
+    Placement p2 = new Placement("b3v");
+    assertEquals(1, p2.getWhere().getRow());
+    assertEquals(3, p2.getWhere().getColumn());
+    assertEquals('V', p2.getOrientation());
+    assertEquals(p1, p2);
   }
 
   @Test

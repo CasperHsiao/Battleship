@@ -17,11 +17,10 @@ public class Placement {
     if (descr.length() != 3) {
       throw new IllegalArgumentException("Placement must be 3 characters long but is " + descr.length());
     }
-    descr.toUpperCase();
     String coordinate_descr = descr.substring(0, 2);
     Coordinate coordinate = new Coordinate(coordinate_descr);
     this.where = coordinate;
-    char orien = descr.charAt(2);
+    char orien = Character.toUpperCase(descr.charAt(2));
     if (orien != 'V' && orien != 'H') {
       throw new IllegalArgumentException("Placement's orientation must be (V)ertical or (H)orizontal but is " + orien);
     }

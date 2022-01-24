@@ -3,12 +3,56 @@
  */
 package edu.duke.ph139.battleship;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.StringReader;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
 class AppTest {
-    @Test void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
+
+  @Test
+  public void test_read_placement() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    StringReader sr = new StringReader("B2V\nC8H\na4v\n");
+    PrintStream ps = new PrintStream(bytes, true);
+    Board<Character> b = new BattleShipBoard<>(10, 20);
+    App app = new App(b, sr, ps);
+    String prompt = "Please enter a location for a ship:";
+    Placement[] expected = new Placement[3];
+    expected[0] = new Placement(new Coordinate(1, 2), 'V');
+    expected[1] = new Placement(new Coordinate(2, 8), 'H');
+    expected[2] = new Placement(new Coordinate(0, 4), 'V');
+    for (int i = 0; i < expected.length; i++) {
+      Placement p = app.readPlacement(prompt);
+      assertEquals(p, expected[i]);
+      assertEquals(prompt + "\n", bytes.toString());
+      bytes.reset();
     }
+  }
+
+  @Test
+  public void test_do_one_placement() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    StringReader sr = new StringReader("B2V\nC8H\na4v\n");
+    PrintStream ps = new PrintStream(bytes, true);
+    Board<Character> b = new BattleShipBoard<>(10, 20);
+    String prompt = "Where would you like to put your ship?";
+    App app = new App(b, sr, ps);
+    Coordinate[] expected = new Coordinate[3];
+    expected[0] = new Coordinate("B2");
+    expected[1] = new Coordinate("C8");
+    expected[2] = new Coordinate("a4");
+    for (int i = 0; i < expected.length; i++) {
+      app.doOnePlacement();
+      assertEquals('s', b.whatIsAt(expected[i]));
+    }
+    //TODO: not yet check the output stream 
+                 
+    
+  }
+
 }

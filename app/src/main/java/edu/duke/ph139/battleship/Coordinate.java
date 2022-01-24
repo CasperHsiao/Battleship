@@ -8,7 +8,7 @@ public class Coordinate {
     if (descr.length() != 2) {
       throw new IllegalArgumentException("Coordinate must be 2 characters long but is " + descr.length());
     }
-    descr.toUpperCase();
+    descr = descr.toUpperCase();
     char rowLetter = descr.charAt(0);
     char colLetter = descr.charAt(1);
     if (rowLetter < 'A' || rowLetter > 'Z') {
