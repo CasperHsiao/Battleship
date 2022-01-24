@@ -14,8 +14,8 @@ public class BoardTextViewTest {
 
   @Test
   public void test_invalid_board_size() {
-    Board b1 = new BattleShipBoard(11, 20);
-    Board b2 = new BattleShipBoard(10, 27);
+    Board<Character> b1 = new BattleShipBoard<Character>(11, 20);
+    Board<Character> b2 = new BattleShipBoard<Character>(10, 27);
     assertThrows(IllegalArgumentException.class, () -> new BoardTextView(b1));
     assertThrows(IllegalArgumentException.class, () -> new BoardTextView(b2));
   }
@@ -28,7 +28,7 @@ public class BoardTextViewTest {
   }
 
   private void emptyBoardHelper(int w, int h, String expectedHeader, String expectedBody) {
-    Board b1 = new BattleShipBoard(w, h);
+    Board<Character> b1 = new BattleShipBoard<Character>(w, h);
     BoardTextView view = new BoardTextView(b1);
     assertEquals(expectedHeader, view.makeHeader());
     assertEquals(expectedBody, view.makeEmptyBody());
