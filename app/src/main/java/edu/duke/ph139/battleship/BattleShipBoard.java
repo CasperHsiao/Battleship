@@ -24,7 +24,7 @@ public class BattleShipBoard<T> implements Board<T> {
     }
     this.width = w;
     this.height = h;
-    this.myShips = new ArrayList();
+    this.myShips = new ArrayList<>();
   }
 
   public boolean tryAddShip(Ship<T> toAdd) {

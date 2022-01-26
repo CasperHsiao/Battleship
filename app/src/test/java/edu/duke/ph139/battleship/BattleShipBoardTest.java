@@ -42,10 +42,10 @@ public class BattleShipBoardTest {
     Coordinate c2 = new Coordinate(4, 2);
     Coordinate c3 = new Coordinate(3, 0);
     Coordinate c4 = new Coordinate(2, 1);
-    Ship<Character> s1 = new BasicShip(c1);
-    Ship<Character> s2 = new BasicShip(c2);
-    Ship<Character> s3 = new BasicShip(c3);
-    Ship<Character> s4 = new BasicShip(c4);
+    Ship<Character> s1 = new RectangleShip<>(c1, 's', '*');
+    Ship<Character> s2 = new RectangleShip<>(c2, 's', '*');
+    Ship<Character> s3 = new RectangleShip<>(c3, 's', '*');
+    Ship<Character> s4 = new RectangleShip<>(c4, 's', '*');
     BattleShipBoard<Character> b1 = new BattleShipBoard<Character>(3, 5);
     assertEquals(b1.tryAddShip(s1), true);
     assertEquals(b1.tryAddShip(s2), true);

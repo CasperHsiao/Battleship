@@ -33,7 +33,7 @@ public class App {
     String prompt = "Where would you like to put your ship?";
     Placement p = readPlacement(prompt);
     Coordinate c = p.getWhere();
-    Ship<Character> s = new BasicShip(c);
+    Ship<Character> s = new RectangleShip<>(c, 's', '*');
     theBoard.tryAddShip(s);
     String output = view.displayMyOwnBoard();
     out.print(output);
