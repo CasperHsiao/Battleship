@@ -1,6 +1,7 @@
 package edu.duke.ph139.battleship;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.HashSet;
 
@@ -34,9 +35,26 @@ public class RectangleShipTest {
     expected.add(new Coordinate(1, 2));
     expected.add(new Coordinate(2, 2));
     expected.add(new Coordinate(3, 2));
-    for (Coordinate c: expected) {
+    for (Coordinate c : expected) {
       assertEquals(s1.occupiesCoordinates(c), true);
     }
   }
+
+  @Test
+  public void test_hit_tracking() {
+    Ship<Character> s1 = new RectangleShip<>(new Coordinate(1, 2), 1, 3, 's', '*');
+    assertThrows(IllegalArgumentException.class, () -> s1.recordHitAt(new Coordinate(0, 0)));
+    Coordinate hitCoord = new Coordinate(1, 2);
+    s1.recordHitAt(hitCoord);
+    assertEquals(true, s1.wasHitAt(hitCoord));
+    assertEquals(false, s1.isSunk());
+    assertEquals('*', s1.getDisplayInfoAt(hitCoord));
+    assertEquals('s', s1.getDisplayInfoAt(new Coordinate(2, 2)));
+    
+    s1.recordHitAt(new Coordinate(2, 2));
+    s1.recordHitAt(new Coordinate(3, 2));
+    assertEquals(true, s1.isSunk());
+  }
+
 
 }

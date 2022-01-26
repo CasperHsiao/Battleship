@@ -14,6 +14,12 @@ public abstract class BasicShip<T> implements Ship<T> {
     this.myDisplayInfo = myDisplayInfo;
   }
 
+  protected void checkCoordinateInThisShip(Coordinate c) {
+    if (myPieces.containsKey(c) == false) {
+      throw new IllegalArgumentException();
+    }
+  }
+
   @Override
   public boolean occupiesCoordinates(Coordinate where) {
     return myPieces.get(where) != null;
@@ -21,26 +27,29 @@ public abstract class BasicShip<T> implements Ship<T> {
 
   @Override
   public boolean isSunk() {
-    // TODO Auto-generated method stub
-    return false;
+    for (boolean wasHit : myPieces.values()) {
+      if (wasHit == false) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @Override
   public void recordHitAt(Coordinate where) {
-    // TODO Auto-generated method stub
-    
+    checkCoordinateInThisShip(where);
+    myPieces.replace(where, true);
   }
 
   @Override
   public boolean wasHitAt(Coordinate where) {
-    // TODO Auto-generated method stub
-    return false;
+    checkCoordinateInThisShip(where);
+    return myPieces.get(where);
   }
 
   @Override
   public T getDisplayInfoAt(Coordinate where) {
-    //TODO this is not right. We need to look up the hit status
-    return myDisplayInfo.getInfo(where, false);
+    return myDisplayInfo.getInfo(where, wasHitAt(where));
   }
 
 }
