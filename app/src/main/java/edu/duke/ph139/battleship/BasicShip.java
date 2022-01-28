@@ -48,6 +48,7 @@ public abstract class BasicShip<T> implements Ship<T> {
 
   @Override
   public T getDisplayInfoAt(Coordinate where) {
+    checkCoordinateInThisShip(where);
     return myDisplayInfo.getInfo(where, wasHitAt(where));
   }
 

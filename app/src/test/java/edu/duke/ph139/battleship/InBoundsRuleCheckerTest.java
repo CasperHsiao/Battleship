@@ -16,7 +16,8 @@ public class InBoundsRuleCheckerTest {
     assertEquals(true, checker.checkPlacement(s1, b));
     assertEquals(false, checker.checkPlacement(s2, b));
     assertEquals(false, checker.checkPlacement(s3, b));
-    
   }
+
+
 
 }
