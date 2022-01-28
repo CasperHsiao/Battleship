@@ -7,43 +7,30 @@ package edu.duke.ph139.battleship;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.PrintStream;
-import java.io.Reader;
+
 
 public class App {
-  final Board<Character> theBoard;
-  final BoardTextView view;
-  final BufferedReader inputReader;
-  final PrintStream out;
-  final AbstractShipFactory<Character> shipFactory;
+  final TextPlayer p1;
+  final TextPlayer p2;
 
-  public App(Board<Character> theBoard, Reader Source, PrintStream out) {
-    this.theBoard = theBoard;
-    this.view = new BoardTextView(theBoard);
-    this.inputReader = new BufferedReader(Source);
-    this.out = out;
-    this.shipFactory = new V1ShipFactory();
+  public App(TextPlayer p1, TextPlayer p2) {
+    this.p1 = p1;
+    this.p2 = p2;
   }
 
-  public Placement readPlacement(String prompt) throws IOException {
-    out.println(prompt);
-    String s = inputReader.readLine();
-    return new Placement(s);
+  public void doPlacementPhase() throws IOException{
+    p1.doPlacementPhase();
+    p2.doPlacementPhase();
   }
-
-  public void doOnePlacement() throws IOException {
-    String prompt = "Where would you like to put your ship?";
-    Placement p = readPlacement(prompt);
-    Ship<Character> s = shipFactory.makeDestroyer(p);
-    theBoard.tryAddShip(s);
-    String output = view.displayMyOwnBoard();
-    out.print(output);
-  }
-
+  
   public static void main(String[] args) throws IOException{
-    BattleShipBoard<Character> b = new BattleShipBoard<>(10, 20);
-    InputStreamReader sr = new InputStreamReader(System.in);
-    App app = new App(b, sr, System.out);
-    app.doOnePlacement();
+    Board<Character> b1 = new BattleShipBoard<>(10, 20);
+    Board<Character> b2 = new BattleShipBoard<>(10, 20);
+    AbstractShipFactory<Character> shipFactory = new V1ShipFactory();
+    BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
+    TextPlayer p1 = new TextPlayer(b1, input, System.out, shipFactory, "A");
+    TextPlayer p2 = new TextPlayer(b2, input, System.out, shipFactory, "B");
+    App app = new App(p1, p2);
+    app.doPlacementPhase();
   }
 }

@@ -10,8 +10,8 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.io.StringReader;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.parallel.ResourceAccessMode;
 import org.junit.jupiter.api.parallel.ResourceLock;
@@ -19,62 +19,12 @@ import org.junit.jupiter.api.parallel.Resources;
 
 class AppTest {
 
-  private App generate_basic_app_for_stringReader(ByteArrayOutputStream bytes, int w, int h, String placements) {
-    StringReader sr = new StringReader(placements);
-    PrintStream ps = new PrintStream(bytes, true);
-    Board<Character> b = new BattleShipBoard<>(w, h);
-    return new App(b, sr, ps);
-  }
-
   @Test
-  public void test_read_placement() throws IOException {
-    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    App app = generate_basic_app_for_stringReader(bytes, 10, 20, "B2V\nC8H\na4v\n");
-    String prompt = "Please enter a location for a ship:";
-    Placement[] expected = new Placement[3];
-    expected[0] = new Placement(new Coordinate(1, 2), 'V');
-    expected[1] = new Placement(new Coordinate(2, 8), 'H');
-    expected[2] = new Placement(new Coordinate(0, 4), 'V');
-    for (int i = 0; i < expected.length; i++) {
-      Placement p = app.readPlacement(prompt);
-      assertEquals(p, expected[i]);
-      assertEquals(prompt + "\n", bytes.toString());
-      bytes.reset();
-    }
-  }
-
-  @Test
-  public void test_do_one_placement() throws IOException {
-    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    App app = generate_basic_app_for_stringReader(bytes, 4, 3, "A0V\nc1h\na3v\n");
-    String prompt = "Where would you like to put your ship?";
-    app.doOnePlacement();
-    String expectedHeader = "  0|1|2|3\n";
-    String expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d| | |  C\n";
-    String expected = expectedHeader + expectedBody + expectedHeader;
-    assertEquals(prompt + "\n" + expected, bytes.toString());
-    bytes.reset();
-    
-    app.doOnePlacement();
-    expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d|d|d|d C\n";
-    expected = expectedHeader + expectedBody + expectedHeader;
-    assertEquals(prompt + "\n" + expected, bytes.toString());
-    bytes.reset();
-
-    app.doOnePlacement();
-    expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d|d|d|d C\n";
-    expected = expectedHeader + expectedBody + expectedHeader;
-    assertEquals(prompt + "\n" + expected, bytes.toString());
-    bytes.reset();
-
-  }
-
-  @Test
+  @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
   public void test_main() throws IOException {
     test_main_helper("input.txt", "output.txt");
   }
 
-  @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
   private void test_main_helper(String inputFilename, String outputFilename) throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     PrintStream out = new PrintStream(bytes, true);
