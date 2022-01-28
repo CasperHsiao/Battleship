@@ -1,5 +1,4 @@
 package edu.duke.ph139.battleship;
-
 import java.util.HashMap;
 
 public abstract class BasicShip<T> implements Ship<T> {
@@ -54,5 +53,10 @@ public abstract class BasicShip<T> implements Ship<T> {
 
   @Override
   abstract public String getName();
+
+  @Override
+  public Iterable<Coordinate> getCoordinates() {
+    return myPieces.keySet();
+  }
 
 }

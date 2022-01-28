@@ -11,9 +11,11 @@ public class Placement {
   }
 
   public Placement(String descr) {
+    /*
     if (descr.length() != 3) {
       throw new IllegalArgumentException("Placement must be 3 characters long but is " + descr.length());
     }
+    */
     String coordinate_descr = descr.substring(0, 2);
     Coordinate coordinate = new Coordinate(coordinate_descr);
     this.where = coordinate;

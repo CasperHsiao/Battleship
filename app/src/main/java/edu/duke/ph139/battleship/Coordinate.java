@@ -5,13 +5,15 @@ public class Coordinate {
   private final int column;
 
   public Coordinate(String descr) {
+    /*
     if (descr.length() != 2) {
       throw new IllegalArgumentException("Coordinate must be 2 characters long but is " + descr.length());
     }
+    */
     descr = descr.toUpperCase();
     char rowLetter = descr.charAt(0);
     char colLetter = descr.charAt(1);
-    
+    /*
     if (rowLetter < 'A' || rowLetter > 'Z') {
       throw new IllegalArgumentException("Coordinate's row must be a character between A and Z but is " + rowLetter);
     }
@@ -19,19 +21,20 @@ public class Coordinate {
     if (colLetter < '0' || colLetter > '9') { //TODO need to check exception
       throw new IllegalArgumentException("Coordinate's column must be a number between 0 and 9 but is " + colLetter);
     }
-    
+    */
     this.row = rowLetter - 'A';
     this.column = colLetter - '0';
   }
 
   public Coordinate(int r, int c) {
-    
+    /*
     if (r < 0) { //TODO need to check exception
       throw new IllegalArgumentException("Coordinate's row must be a number between 0 and 25 but is " + r);
     }
     if (c < 0) { //TODO need to check exception
       throw new IllegalArgumentException("Coordinate's column must be a number between 0 and 9 but is " + c);
     }
+    */
     this.row = r;
     this.column = c;
   }
