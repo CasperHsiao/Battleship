@@ -46,7 +46,7 @@ class AppTest {
   @Test
   public void test_do_one_placement() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    App app = generate_basic_app_for_stringReader(bytes, 4, 3, "A0V\nA3v\nc0h\n");
+    App app = generate_basic_app_for_stringReader(bytes, 4, 3, "A0V\nc1h\na3v\n");
     String prompt = "Where would you like to put your ship?";
     app.doOnePlacement();
     String expectedHeader = "  0|1|2|3\n";
@@ -54,15 +54,15 @@ class AppTest {
     String expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();
-
+    
     app.doOnePlacement();
-    expectedBody = "A d| | |d A\n" + "B d| | |d B\n" + "C d| | |d C\n";
+    expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d|d|d|d C\n";
     expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();
 
     app.doOnePlacement();
-    expectedBody = "A d| | |d A\n" + "B d| | |d B\n" + "C d|d|d|d C\n";
+    expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d|d|d|d C\n";
     expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();

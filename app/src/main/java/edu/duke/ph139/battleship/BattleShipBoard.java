@@ -17,7 +17,7 @@ public class BattleShipBoard<T> implements Board<T> {
    *                                  to zero.
    */
   public BattleShipBoard(int w, int h) {
-    this(w, h, new InBoundsRuleChecker<T>(null));
+    this(w, h, new InBoundsRuleChecker<>(new NoCollisionRuleChecker<>(null)));
   }
 
   public BattleShipBoard(int w, int h, PlacementRuleChecker<T> placementChecker) {
@@ -34,8 +34,11 @@ public class BattleShipBoard<T> implements Board<T> {
   }
 
   public boolean tryAddShip(Ship<T> toAdd) {
-    myShips.add(toAdd);
-    return true;
+    if (placementChecker.checkPlacement(toAdd, this)) {
+      myShips.add(toAdd);
+      return true;
+    }
+    return false;
   }
 
   // Does not check if coordinate out of bounds
