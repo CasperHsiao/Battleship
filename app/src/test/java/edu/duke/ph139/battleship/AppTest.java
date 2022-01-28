@@ -46,23 +46,23 @@ class AppTest {
   @Test
   public void test_do_one_placement() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    App app = generate_basic_app_for_stringReader(bytes, 4, 3, "B2V\nA2H\nc0v\n");
+    App app = generate_basic_app_for_stringReader(bytes, 4, 3, "A0V\nA3v\nc0h\n");
     String prompt = "Where would you like to put your ship?";
     app.doOnePlacement();
     String expectedHeader = "  0|1|2|3\n";
-    String expectedBody = "A  | | |  A\n" + "B  | |s|  B\n" + "C  | | |  C\n";
+    String expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d| | |  C\n";
     String expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();
 
     app.doOnePlacement();
-    expectedBody = "A  | |s|  A\n" + "B  | |s|  B\n" + "C  | | |  C\n";
+    expectedBody = "A d| | |d A\n" + "B d| | |d B\n" + "C d| | |d C\n";
     expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();
 
     app.doOnePlacement();
-    expectedBody = "A  | |s|  A\n" + "B  | |s|  B\n" + "C s| | |  C\n";
+    expectedBody = "A d| | |d A\n" + "B d| | |d B\n" + "C d|d|d|d C\n";
     expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();
@@ -71,7 +71,7 @@ class AppTest {
 
   @Test
   public void test_main() throws IOException {
-    test_main_helper("input1.txt", "output1.txt");
+    test_main_helper("input.txt", "output.txt");
   }
 
   @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)

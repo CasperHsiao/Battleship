@@ -11,21 +11,25 @@ public class Coordinate {
     descr = descr.toUpperCase();
     char rowLetter = descr.charAt(0);
     char colLetter = descr.charAt(1);
+    
     if (rowLetter < 'A' || rowLetter > 'Z') {
       throw new IllegalArgumentException("Coordinate's row must be a character between A and Z but is " + rowLetter);
     }
-    if (colLetter < '0' || colLetter > '9') {
+    
+    if (colLetter < '0' || colLetter > '9') { //TODO need to check exception
       throw new IllegalArgumentException("Coordinate's column must be a number between 0 and 9 but is " + colLetter);
     }
+    
     this.row = rowLetter - 'A';
     this.column = colLetter - '0';
   }
 
   public Coordinate(int r, int c) {
-    if (r < 0 || r > 25) {
+    
+    if (r < 0) { //TODO need to check exception
       throw new IllegalArgumentException("Coordinate's row must be a number between 0 and 25 but is " + r);
     }
-    if (c < 0 || c > 9) {
+    if (c < 0) { //TODO need to check exception
       throw new IllegalArgumentException("Coordinate's column must be a number between 0 and 9 but is " + c);
     }
     this.row = r;

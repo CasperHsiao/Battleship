@@ -30,19 +30,23 @@ public class RectangleShipTest {
 
   @Test
   public void test_constructor() {
-    Ship<Character> s1 = new RectangleShip<>(new Coordinate(1, 2), 1, 3, 's', '*');
+    Coordinate cTest = new Coordinate(1, 2);
+    Ship<Character> s1 = new RectangleShip<>("submarine", cTest, 1, 3, 's', '*');
+    ShipDisplayInfo<Character> subDisp = new SimpleShipDisplayInfo<Character>('s', '*');
+    Ship<Character> s2 = new RectangleShip<>("submarine", cTest, 1, 3, subDisp);
     HashSet<Coordinate> expected = new HashSet<>();
     expected.add(new Coordinate(1, 2));
     expected.add(new Coordinate(2, 2));
     expected.add(new Coordinate(3, 2));
     for (Coordinate c : expected) {
       assertEquals(s1.occupiesCoordinates(c), true);
+      assertEquals(s2.occupiesCoordinates(c), true);
     }
   }
 
   @Test
   public void test_hit_tracking() {
-    Ship<Character> s1 = new RectangleShip<>(new Coordinate(1, 2), 1, 3, 's', '*');
+    Ship<Character> s1 = new RectangleShip<>("submarine", new Coordinate(1, 2), 1, 3, 's', '*');
     assertThrows(IllegalArgumentException.class, () -> s1.recordHitAt(new Coordinate(0, 0)));
     Coordinate hitCoord = new Coordinate(1, 2);
     s1.recordHitAt(hitCoord);
@@ -54,6 +58,12 @@ public class RectangleShipTest {
     s1.recordHitAt(new Coordinate(2, 2));
     s1.recordHitAt(new Coordinate(3, 2));
     assertEquals(true, s1.isSunk());
+  }
+
+  @Test
+  public void test_getName() {
+    Ship<Character> s1 = new RectangleShip<>(new Coordinate(1, 2), 's', '*');
+    assertEquals("testship", s1.getName());
   }
 
 

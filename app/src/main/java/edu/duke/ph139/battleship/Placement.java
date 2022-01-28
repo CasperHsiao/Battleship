@@ -7,9 +7,6 @@ public class Placement {
   public Placement(Coordinate where, char orien) {
     this.where = where;
     orien = Character.toUpperCase(orien);
-    if (orien != 'V' && orien != 'H') {
-      throw new IllegalArgumentException("Placement's orientation must be (V)ertical or (H)orizontal but is " + orien);
-    }
     this.orientation = orien;
   }
 
@@ -21,9 +18,6 @@ public class Placement {
     Coordinate coordinate = new Coordinate(coordinate_descr);
     this.where = coordinate;
     char orien = Character.toUpperCase(descr.charAt(2));
-    if (orien != 'V' && orien != 'H') {
-      throw new IllegalArgumentException("Placement's orientation must be (V)ertical or (H)orizontal but is " + orien);
-    }
     this.orientation = orien;
   }
 

@@ -52,4 +52,7 @@ public abstract class BasicShip<T> implements Ship<T> {
     return myDisplayInfo.getInfo(where, wasHitAt(where));
   }
 
+  @Override
+  abstract public String getName();
+
 }
