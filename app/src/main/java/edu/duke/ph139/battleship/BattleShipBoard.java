@@ -33,12 +33,13 @@ public class BattleShipBoard<T> implements Board<T> {
     this.placementChecker = placementChecker;
   }
 
-  public boolean tryAddShip(Ship<T> toAdd) {
-    if (placementChecker.checkPlacement(toAdd, this)) {
+  public String tryAddShip(Ship<T> toAdd) {
+    String placementResult = placementChecker.checkPlacement(toAdd, this);
+    if (placementResult == null) {
       myShips.add(toAdd);
-      return true;
+      return null;
     }
-    return false;
+    return placementResult;
   }
 
   // Does not check if coordinate out of bounds

@@ -13,11 +13,11 @@ public class NoCollisionRuleCheckerTest {
     Ship<Character> s1 = f.makeCarrier(new Placement("A0V"));
     Ship<Character> s2 = f.makeCarrier(new Placement("C1H"));
     Ship<Character> s3 = f.makeCarrier(new Placement("E0V"));
-    assertEquals(true, checker.checkPlacement(s1, b));
+    assertEquals(null, checker.checkPlacement(s1, b));
     b.tryAddShip(s1);
-    assertEquals(true, checker.checkPlacement(s2, b));
+    assertEquals(null, checker.checkPlacement(s2, b));
     b.tryAddShip(s2);
-    assertEquals(false, checker.checkPlacement(s3, b));
+    assertEquals("That placement is invalid: the ship overlaps another ship.", checker.checkPlacement(s3, b));
   }
 
   @Test
@@ -29,15 +29,20 @@ public class NoCollisionRuleCheckerTest {
     Ship<Character> s1 = f.makeCarrier(new Placement("A0V"));
     Ship<Character> s2 = f.makeCarrier(new Placement("C1H"));
     Ship<Character> s3 = f.makeCarrier(new Placement("E0V"));
-    assertEquals(true, NCChecker.checkPlacement(s1, b)); //NC
+    assertEquals(null, NCChecker.checkPlacement(s1, b)); //NC
     b.tryAddShip(s1);
-    assertEquals(true, NCChecker.checkPlacement(s2, b)); //NC
+    assertEquals(null, NCChecker.checkPlacement(s2, b)); //NC
     b.tryAddShip(s2);
-    assertEquals(false, NCChecker.checkPlacement(s3, b)); //Collison
+    assertEquals("That placement is invalid: the ship overlaps another ship.", NCChecker.checkPlacement(s3, b)); //Collison
     Ship<Character> s4 = f.makeCarrier(new Placement("z0V")); //Out bounds
     Ship<Character> s5 = f.makeCarrier(new Placement("A9h")); //Out bounds
-    assertEquals(false, NCChecker.checkPlacement(s4, b));
-    assertEquals(false, NCChecker.checkPlacement(s5, b));
+    assertEquals("That placement is invalid: the ship goes off the bottom of the board.", NCChecker.checkPlacement(s4, b));
+    assertEquals("That placement is invalid: the ship goes off the right of the board.", NCChecker.checkPlacement(s5, b));
+    Ship<Character> s6 = f.makeCarrier(new Placement(new Coordinate(17, -1), 'H')); //Out bounds
+    assertEquals("That placement is invalid: the ship goes off the left of the board.", NCChecker.checkPlacement(s6, b));
+    Ship<Character> s7 = f.makeCarrier(new Placement(new Coordinate(-1, 9), 'V')); //Out bounds
+    assertEquals("That placement is invalid: the ship goes off the top of the board.", NCChecker.checkPlacement(s7, b));
+
   }
 
 }

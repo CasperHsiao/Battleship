@@ -47,10 +47,10 @@ public class BattleShipBoardTest {
     Ship<Character> s3 = new RectangleShip<>(c3, 's', '*');
     Ship<Character> s4 = new RectangleShip<>(c4, 's', '*');
     BattleShipBoard<Character> b1 = new BattleShipBoard<Character>(3, 5);
-    assertEquals(b1.tryAddShip(s1), true);
-    assertEquals(b1.tryAddShip(s2), true);
-    assertEquals(b1.tryAddShip(s3), true);
-    assertEquals(b1.tryAddShip(s4), true);
+    assertEquals(b1.tryAddShip(s1), null);
+    assertEquals(b1.tryAddShip(s2), null);
+    assertEquals(b1.tryAddShip(s3), null);
+    assertEquals(b1.tryAddShip(s4), null);
     Character[][] expected = { { null, null, null }, { null, null, 's' }, { null, 's', null }, { 's', null, null },
         { null, null, 's' } };
     checkWhatIsAtBoard(b1, expected);

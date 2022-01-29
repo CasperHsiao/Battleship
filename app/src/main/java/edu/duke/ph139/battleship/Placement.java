@@ -11,12 +11,16 @@ public class Placement {
   }
 
   public Placement(String descr) {
-    /*
     if (descr.length() != 3) {
       throw new IllegalArgumentException("Placement must be 3 characters long but is " + descr.length());
-    }
-    */
+    }    
     String coordinate_descr = descr.substring(0, 2);
+    if (!Character.isAlphabetic(coordinate_descr.charAt(0))){ // || !Character.isLowerCase(coordinate_descr.charAt(0))) {
+      throw new IllegalArgumentException("First character of the placement must be a alphabet but is " + coordinate_descr.charAt(0));
+    }
+    if (!Character.isDigit(coordinate_descr.charAt(1))) {
+      throw new IllegalArgumentException("Second character of the placement must be a digit but is " + coordinate_descr.charAt(1));
+    }
     Coordinate coordinate = new Coordinate(coordinate_descr);
     this.where = coordinate;
     char orien = Character.toUpperCase(descr.charAt(2));

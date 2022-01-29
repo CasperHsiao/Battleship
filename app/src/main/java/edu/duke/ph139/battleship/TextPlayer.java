@@ -1,6 +1,7 @@
 package edu.duke.ph139.battleship;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
@@ -40,23 +41,29 @@ public class TextPlayer {
   }
 
   protected void setupShipCreationList() {
-    shipToPlace.addAll(Collections.nCopies(2, "Submarine"));
-    shipToPlace.addAll(Collections.nCopies(3, "Destroyer"));
-    shipToPlace.addAll(Collections.nCopies(3, "Battleship"));
-    shipToPlace.addAll(Collections.nCopies(2, "Carrier"));
+    shipToPlace.addAll(Collections.nCopies(1, "Submarine"));
+    shipToPlace.addAll(Collections.nCopies(1, "Destroyer"));
+    shipToPlace.addAll(Collections.nCopies(1, "Battleship"));
+    shipToPlace.addAll(Collections.nCopies(0, "Carrier"));
   }
 
   public Placement readPlacement(String prompt) throws IOException {
-    out.println(prompt);
+    out.print(prompt);
     String s = inputReader.readLine();
+    if (s == null) {
+      throw new EOFException();
+    }
     return new Placement(s);
   }
 
   public void doOnePlacement(String shipName, Function<Placement, Ship<Character>> createFn) throws IOException {
-    String prompt = "Player " + name + " where do you want to place a " + shipName + "?";
+    String prompt = "Player " + name + " where do you want to place a " + shipName + "?\n";
     Placement p = readPlacement(prompt);
     Ship<Character> s = createFn.apply(p);
-    theBoard.tryAddShip(s);
+    String addShipResult = theBoard.tryAddShip(s);
+    if (addShipResult != null) {
+      throw new IllegalArgumentException(addShipResult);
+    }
     String output = view.displayMyOwnBoard();
     out.print(output);
   }
@@ -65,7 +72,12 @@ public class TextPlayer {
     out.print(view.displayMyOwnBoard());
     out.print("Player " + name + ": you are going to place the following ships (which are all\nrectangular). For each ship, type the coordinate of the upper left\nside of the ship, followed by either H (for horizontal) or V (for\nvertical).  For example M4H would place a ship horizontally starting\nat M4 and going to the right.  You have\n\n2 \"Submarines\" ships that are 1x2 \n3 \"Destroyers\" that are 1x3\n3 \"Battleships\" that are 1x4\n2 \"Carriers\" that are 1x6\n");
     for (String shipName : shipToPlace) {
-      doOnePlacement(shipName, shipCreationsFns.get(shipName));
+      try {
+        doOnePlacement(shipName, shipCreationsFns.get(shipName));
+      } catch (IllegalArgumentException e) {
+        out.println(e.getMessage());
+        doOnePlacement(shipName, shipCreationsFns.get(shipName));
+      }
     }
   }
 

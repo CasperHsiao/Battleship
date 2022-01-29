@@ -54,14 +54,14 @@ public class BoardTextViewTest {
     Ship<Character> s2 = new RectangleShip<>(c2, 's', '*');
     Ship<Character> s3 = new RectangleShip<>(c3, 's', '*');
     Ship<Character> s4 = new RectangleShip<>(c4, 's', '*');
-    assertEquals(b1.tryAddShip(s1), true);
-    assertEquals(b1.tryAddShip(s2), true);
+    assertEquals(b1.tryAddShip(s1), null);
+    assertEquals(b1.tryAddShip(s2), null);
     String expectedHeader = "  0|1|2|3\n";
     String expectedBody = "A  | |s|  A\n" + "B  | |s|  B\n" + "C  | | |  C\n";
     String expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(expected, view.displayMyOwnBoard());
-    assertEquals(b1.tryAddShip(s3), true);
-    assertEquals(b1.tryAddShip(s4), true);
+    assertEquals(b1.tryAddShip(s3), null);
+    assertEquals(b1.tryAddShip(s4), null);
     Character[][] expectedArray = { { null, null, 's', null}, { null, null, 's', null}, { 's', 's', null, null}};
     expectedBody = "A  | |s|  A\n" + "B  | |s|  B\n" + "C s|s| |  C\n";
     expected = expectedHeader + expectedBody + expectedHeader;

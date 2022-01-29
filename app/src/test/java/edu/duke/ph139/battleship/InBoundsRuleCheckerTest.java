@@ -13,9 +13,16 @@ public class InBoundsRuleCheckerTest {
     Ship<Character> s1 = f.makeCarrier(new Placement("A0V"));
     Ship<Character> s2 = f.makeCarrier(new Placement("z0V"));
     Ship<Character> s3 = f.makeCarrier(new Placement("A9h"));
-    assertEquals(true, checker.checkPlacement(s1, b));
-    assertEquals(false, checker.checkPlacement(s2, b));
-    assertEquals(false, checker.checkPlacement(s3, b));
+    assertEquals(null, checker.checkPlacement(s1, b));
+    Ship<Character> s4 = f.makeCarrier(new Placement("z0V")); //Out bounds
+    Ship<Character> s5 = f.makeCarrier(new Placement("A9h")); //Out bounds
+    assertEquals("That placement is invalid: the ship goes off the bottom of the board.", checker.checkPlacement(s4, b));
+    assertEquals("That placement is invalid: the ship goes off the right of the board.", checker.checkPlacement(s5, b));
+    Ship<Character> s6 = f.makeCarrier(new Placement(new Coordinate(0, -1), 'H')); //Out bounds
+    assertEquals("That placement is invalid: the ship goes off the left of the board.", checker.checkPlacement(s6, b));
+    Ship<Character> s7 = f.makeCarrier(new Placement(new Coordinate(-1, 0), 'V')); //Out bounds
+    assertEquals("That placement is invalid: the ship goes off the top of the board.", checker.checkPlacement(s7, b));
+
   }
 
 
