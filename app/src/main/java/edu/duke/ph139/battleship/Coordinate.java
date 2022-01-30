@@ -5,21 +5,19 @@ public class Coordinate {
   private final int column;
 
   public Coordinate(String descr) {
-    /*
     if (descr.length() != 2) {
       throw new IllegalArgumentException("Coordinate must be 2 characters long but is " + descr.length());
     }
-    */
     descr = descr.toUpperCase();
     char rowLetter = descr.charAt(0);
     char colLetter = descr.charAt(1);
     /*
-    if (rowLetter < 'A' || rowLetter > 'Z') {
-      throw new IllegalArgumentException("Coordinate's row must be a character between A and Z but is " + rowLetter);
+    if (!Character.isAlphabetic(rowLetter)) {
+      throw new IllegalArgumentException("First character of the coordinate must be a alphabet but is " + rowLetter);
     }
     
-    if (colLetter < '0' || colLetter > '9') { //TODO need to check exception
-      throw new IllegalArgumentException("Coordinate's column must be a number between 0 and 9 but is " + colLetter);
+    if (!Character.isDigit(colLetter)) { 
+      throw new IllegalArgumentException("First character of the coordinate must be a digit but is " + colLetter);
     }
     */
     this.row = rowLetter - 'A';

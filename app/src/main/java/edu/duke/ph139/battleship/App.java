@@ -22,6 +22,30 @@ public class App {
     p1.doPlacementPhase();
     p2.doPlacementPhase();
   }
+
+  public void doAttackingPhase(TextPlayer p1, TextPlayer p2) throws IOException{
+    boolean p1Lost = false;
+    boolean p2Lost = false;
+    while (!p1Lost && !p2Lost) {
+      p1.playOneTurn(p2.theBoard, p2.view, "Player " + p2.name + "'s ocean");
+      if (p2.theBoard.hasLost()) {
+        p2Lost = true;
+        break;
+      }
+      p2.playOneTurn(p1.theBoard, p1.view, "Player " + p1.name + "'s ocean");
+      if (p1.theBoard.hasLost()) {
+        p1Lost = true;
+      }
+    }
+  }
+
+  public void announceWinner(TextPlayer p1, TextPlayer p2) {
+    if (p1.theBoard.hasLost()) {
+      System.out.println("Player " + p2.name + " has won!");
+    } else {
+      System.out.println("Player " + p1.name + " has won!");
+    }
+  }
   
   public static void main(String[] args) throws IOException{
     Board<Character> b1 = new BattleShipBoard<>(10, 20, 'X');
@@ -32,5 +56,7 @@ public class App {
     TextPlayer p2 = new TextPlayer(b2, input, System.out, shipFactory, "B");
     App app = new App(p1, p2);
     app.doPlacementPhase();
+    app.doAttackingPhase(p1, p2);
+    app.announceWinner(p1, p2);
   }
 }

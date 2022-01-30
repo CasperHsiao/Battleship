@@ -7,4 +7,5 @@ public interface Board<T>{
   public String tryAddShip(Ship<T> toAdd);
   public Ship<T> fireAt(Coordinate c);
   public T whatIsAtForEnemy(Coordinate where);
+  public boolean hasLost();
 }

@@ -32,7 +32,7 @@ public class TextPlayer {
     setupShipCreationList();
     setupShipCreationMap();
   }
-  
+
   protected void setupShipCreationMap() {
     shipCreationsFns.put("Submarine", (p) -> shipFactory.makeSubmarine(p));
     shipCreationsFns.put("Destroyer", (p) -> shipFactory.makeDestroyer(p));
@@ -68,17 +68,60 @@ public class TextPlayer {
     out.print(output);
   }
 
-  public void doPlacementPhase() throws IOException{
+  public void doPlacementPhase() throws IOException {
     out.print(view.displayMyOwnBoard());
-    out.print("Player " + name + ": you are going to place the following ships (which are all\nrectangular). For each ship, type the coordinate of the upper left\nside of the ship, followed by either H (for horizontal) or V (for\nvertical).  For example M4H would place a ship horizontally starting\nat M4 and going to the right.  You have\n\n2 \"Submarines\" ships that are 1x2 \n3 \"Destroyers\" that are 1x3\n3 \"Battleships\" that are 1x4\n2 \"Carriers\" that are 1x6\n");
-    for (String shipName : shipToPlace) {
+    out.print("Player " + name
+        + ": you are going to place the following ships (which are all\nrectangular). For each ship, type the coordinate of the upper left\nside of the ship, followed by either H (for horizontal) or V (for\nvertical).  For example M4H would place a ship horizontally starting\nat M4 and going to the right.  You have\n\n2 \"Submarines\" ships that are 1x2 \n3 \"Destroyers\" that are 1x3\n3 \"Battleships\" that are 1x4\n2 \"Carriers\" that are 1x6\n");
+
+    for (int i = 0; i < shipToPlace.size(); i++) {
+      String shipName = shipToPlace.get(i);
       try {
         doOnePlacement(shipName, shipCreationsFns.get(shipName));
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage());
-        doOnePlacement(shipName, shipCreationsFns.get(shipName));
+        i--;
       }
     }
   }
 
+  public Coordinate readCoordinate(String prompt) throws IOException {
+    out.print(prompt);
+    String s = inputReader.readLine();
+    if (s == null) {
+      throw new EOFException();
+    }
+    return new Coordinate(s);
+  }
+
+  public void checkCoordinate(Coordinate c, Board<Character> board) {
+    if (c.getRow() < 0 || c.getRow() >= board.getHeight()) {
+      throw new IllegalArgumentException("The coordinate entered is out of bounds.");
+    }
+    if (c.getColumn() < 0 || c.getColumn() >= board.getWidth()) {
+      throw new IllegalArgumentException("The coordinate entered is out of bounds.");
+    }
+  }
+
+  public void playOneTurn(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader)
+      throws IOException {
+    out.println("Player " + name + "'s turn:");
+    out.print(view.displayMyBoardWithEnemyNextToIt(enemyBoardView, "Your ocean", enemyHeader));
+    boolean validPlay = false;
+    while (!validPlay) {
+      try {
+        Coordinate c = readCoordinate("Please enter a coordinate to fire at!\n");
+        checkCoordinate(c, enemyBoard);
+        Ship<Character> s = enemyBoard.fireAt(c);
+        if (s != null) {
+          out.println("You hit a " + s.getName() + "!");
+        } else {
+          out.println("You missed!");
+        }
+        validPlay = true;
+      } catch (IllegalArgumentException e) {
+        out.println(e.getMessage());
+        validPlay = false;
+      }
+    }
+  }
 }

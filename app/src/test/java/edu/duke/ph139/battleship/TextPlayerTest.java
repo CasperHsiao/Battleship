@@ -43,6 +43,52 @@ public class TextPlayerTest {
   }
 
   @Test
+  public void test_read_coordinate() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 10, 20, "B2\nC8\na4\n");
+    String prompt = "Please enter a coordinate to fire at!\n";
+    Coordinate c1 = p1.readCoordinate(prompt);
+    assertEquals(c1, new Coordinate(1, 2));
+    assertEquals(prompt, bytes.toString());
+    bytes.reset();
+    Coordinate c2 = p1.readCoordinate(prompt);
+    assertEquals(c2, new Coordinate(2, 8));
+    assertEquals(prompt, bytes.toString());
+    bytes.reset();
+    Coordinate c3 = p1.readCoordinate(prompt);
+    assertEquals(c3, new Coordinate(0, 4));
+    assertEquals(prompt, bytes.toString());
+    assertThrows(EOFException.class, () -> p1.readCoordinate(prompt));
+    bytes.reset();
+  }
+
+  @Test
+  public void test_playOneTurn() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 10, 6, "Bl\ng2\nb0\na0\n");
+    TextPlayer enemy = generate_basic_player_for_stringReader("B", bytes, 10, 6, "");
+    Ship<Character> s = enemy.shipFactory.makeSubmarine(new Placement("a0h"));
+    enemy.theBoard.tryAddShip(s);
+    String dummyHeader = "Player B's ocean";
+    p1.playOneTurn(enemy.theBoard, enemy.view, dummyHeader);
+    String turnPrompt = "Player A's turn:\n";
+    String boardView1 = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B  | | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n";
+    String coordPrompt = "Please enter a coordinate to fire at!\n";
+    String invalidCoord = "The coordinate entered is out of bounds.\n";
+    String hitPrompt = "You hit a submarine!\n";
+    String missedPrompt = "You missed!\n";
+    assertEquals(
+        turnPrompt + boardView1 + coordPrompt + invalidCoord + coordPrompt + invalidCoord + coordPrompt + missedPrompt,
+        bytes.toString());
+    bytes.reset();
+    p1.playOneTurn(enemy.theBoard, enemy.view, dummyHeader);
+    String boardView2 = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B X| | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n";
+    assertEquals(turnPrompt + boardView2 + coordPrompt + hitPrompt, bytes.toString());
+    bytes.reset();
+
+  }
+
+  @Test
   public void test_read_placement_EOF() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 10, 20, "");
@@ -75,12 +121,12 @@ public class TextPlayerTest {
 
   }
 
-
   @Test
   /*
-   * Test is tied to 1 submarine, 1 destroyer, 1 battleship placement. Battleship is placed out of bounds.
+   * Test is tied to 1 submarine, 1 destroyer, 1 battleship placement. Battleship
+   * is placed out of bounds.
    */
-  public void test_doPlacementPhase() throws IOException{
+  public void test_doPlacementPhase() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 4, 3, "A0V\na1h\nc0v\n");
     assertThrows(EOFException.class, () -> p1.doPlacementPhase());
@@ -94,16 +140,19 @@ public class TextPlayerTest {
     String prompt2 = "Player A where do you want to place a Destroyer?\n";
     String expectedBodyAfter2 = "A s|d|d|d A\n" + "B s| | |  B\n" + "C  | | |  C\n";
     String expectedAfter2 = expectedHeader + expectedBodyAfter2 + expectedHeader;
-    
+
     String prompt3 = "Player A where do you want to place a Battleship?\n";
 
     /*
-    String expectedBodyAfter3 = "A s|d|d|d A\n" + "B s| | |  B\n" + "C b|b|b|b C\n";
-    String expectedAfter3 = expectedHeader + expectedBodyAfter3 + expectedHeader;
-    */
+     * String expectedBodyAfter3 = "A s|d|d|d A\n" + "B s| | |  B\n" +
+     * "C b|b|b|b C\n"; String expectedAfter3 = expectedHeader + expectedBodyAfter3
+     * + expectedHeader;
+     */
     String errMsg = "That placement is invalid: the ship goes off the bottom of the board.\n";
-    assertEquals(expectedBefore + startPrompt + prompt1 + expectedAfter1 + prompt2 + expectedAfter2 + prompt3 + errMsg + prompt3, bytes.toString());
+    assertEquals(
+        expectedBefore + startPrompt + prompt1 + expectedAfter1 + prompt2 + expectedAfter2 + prompt3 + errMsg + prompt3,
+        bytes.toString());
     bytes.reset();
-    
+
   }
 }

@@ -38,6 +38,15 @@ public class BattleShipBoard<T> implements Board<T> {
     this.missInfo = missInfo;
   }
 
+  public boolean hasLost() {
+    for (Ship<T> s : myShips) {
+      if (!s.isSunk()) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   public Ship<T> fireAt(Coordinate c) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
