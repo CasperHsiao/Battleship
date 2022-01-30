@@ -27,6 +27,30 @@ public class BoardTextView {
     }
   }
 
+  public String displayMyBoardWithEnemyNextToIt(BoardTextView enemyView, String myHeader, String enemyHeader) {
+    StringBuilder sb = new StringBuilder();
+    int w = toDisplay.getWidth();
+    for (int i = 0; i < 2*w + 22 - myHeader.length(); i++) {
+      sb.append(" ");
+    }
+
+    sb.insert(5, myHeader);
+    sb.append(enemyHeader + "\n");
+    String own = displayMyOwnBoard();
+    String enemy = enemyView.displayEnemyBoard();
+    String [] ownLines = own.split("\n");
+    String [] enemyLines = enemy.split("\n");
+    for (int i = 0; i < ownLines.length; i++) {
+      sb.append(ownLines[i]);
+      for (int j = 0; j < 2*w + 19 - ownLines[i].length(); j++) {
+        sb.append(" ");
+      }
+      sb.append(enemyLines[i] + "\n");
+    }
+    
+    return sb.toString();
+  }
+
   /**
    * This makes the empty board view for the given boardtoDisplay
    * 

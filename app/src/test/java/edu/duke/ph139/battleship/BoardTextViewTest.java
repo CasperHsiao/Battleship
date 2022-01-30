@@ -1,7 +1,13 @@
 
 package edu.duke.ph139.battleship;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
+import java.io.PrintStream;
 
 import org.junit.jupiter.api.Test;
 
@@ -63,12 +69,12 @@ public class BoardTextViewTest {
     assertEquals(expected, view.displayMyOwnBoard());
     assertEquals(b1.tryAddShip(s3), null);
     assertEquals(b1.tryAddShip(s4), null);
-    Character[][] expectedArray = { { null, null, 's', null}, { null, null, 's', null}, { 's', 's', null, null}};
+    Character[][] expectedArray = { { null, null, 's', null }, { null, null, 's', null }, { 's', 's', null, null } };
     expectedBody = "A  | |s|  A\n" + "B  | |s|  B\n" + "C s|s| |  C\n";
     expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(expected, view.displayMyOwnBoard());
-    
-   }
+
+  }
 
   @Test
   public void test_displayEnemyBoard() {
@@ -78,20 +84,32 @@ public class BoardTextViewTest {
     Ship<Character> s1 = f.makeSubmarine(new Placement("A0h"));
     b1.tryAddShip(s1);
     String expectedHeader = "  0|1|2|3\n";
-    String myView1 =  "A s|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
-    String enemyView1 =  "A  | | |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String myView1 = "A s|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String enemyView1 = "A  | | |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
     assertEquals(expectedHeader + myView1 + expectedHeader, view.displayMyOwnBoard());
     assertEquals(expectedHeader + enemyView1 + expectedHeader, view.displayEnemyBoard());
     b1.fireAt(new Coordinate(0, 0));
-    String myView2 =  "A *|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
-    String enemyView2 =  "A s| | |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String myView2 = "A *|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String enemyView2 = "A s| | |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
     assertEquals(expectedHeader + myView2 + expectedHeader, view.displayMyOwnBoard());
     assertEquals(expectedHeader + enemyView2 + expectedHeader, view.displayEnemyBoard());
     b1.fireAt(new Coordinate(1, 0));
-    String myView3 =  "A *|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
-    String enemyView3 =  "A s| | |  A\n" + "B X| | |  B\n" + "C  | | |  C\n";
+    String myView3 = "A *|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String enemyView3 = "A s| | |  A\n" + "B X| | |  B\n" + "C  | | |  C\n";
     assertEquals(expectedHeader + myView3 + expectedHeader, view.displayMyOwnBoard());
     assertEquals(expectedHeader + enemyView3 + expectedHeader, view.displayEnemyBoard());
 
+  }
+
+  @Test
+  public void test_display_both() {
+    Board<Character> b1 = new BattleShipBoard<>(10, 6, 'X');
+    BoardTextView view1 = new BoardTextView(b1);
+    Board<Character> b2 = new BattleShipBoard<>(10, 6, 'X');
+    BoardTextView view2 = new BoardTextView(b1);
+    String temp = "\n" + view1.displayMyBoardWithEnemyNextToIt(view2, "Your ocean", "Player B's ocean");
+
+    String expected = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B  | | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n";
+    assertEquals("\n" + expected, temp);
   }
 }
