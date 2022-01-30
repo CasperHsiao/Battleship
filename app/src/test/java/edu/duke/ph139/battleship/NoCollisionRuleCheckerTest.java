@@ -9,7 +9,7 @@ public class NoCollisionRuleCheckerTest {
   public void test_checkMyRule() {
     AbstractShipFactory<Character> f = new V1ShipFactory();
     PlacementRuleChecker<Character> checker = new NoCollisionRuleChecker<>(null);
-    Board<Character> b = new BattleShipBoard<>(10, 20, checker);
+    Board<Character> b = new BattleShipBoard<>(10, 20, checker, 'X');
     Ship<Character> s1 = f.makeCarrier(new Placement("A0V"));
     Ship<Character> s2 = f.makeCarrier(new Placement("C1H"));
     Ship<Character> s3 = f.makeCarrier(new Placement("E0V"));
@@ -25,7 +25,7 @@ public class NoCollisionRuleCheckerTest {
     AbstractShipFactory<Character> f = new V1ShipFactory();
     PlacementRuleChecker<Character> IBChecker = new InBoundsRuleChecker<>(null);
     PlacementRuleChecker<Character> NCChecker = new NoCollisionRuleChecker<>(IBChecker);
-    Board<Character> b = new BattleShipBoard<>(10, 20, NCChecker);
+    Board<Character> b = new BattleShipBoard<>(10, 20, NCChecker, 'X');
     Ship<Character> s1 = f.makeCarrier(new Placement("A0V"));
     Ship<Character> s2 = f.makeCarrier(new Placement("C1H"));
     Ship<Character> s3 = f.makeCarrier(new Placement("E0V"));

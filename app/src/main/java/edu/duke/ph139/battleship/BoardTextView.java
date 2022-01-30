@@ -1,5 +1,7 @@
 package edu.duke.ph139.battleship;
 
+import java.util.function.Function;
+
 /**
  * This class handles textual display of a Board (i.e., converting it to a
  * string to show to the user). It supports two ways to display the Board: one
@@ -31,7 +33,34 @@ public class BoardTextView {
    * @return the String that is the empty board view for the given board
    */
   public String displayMyOwnBoard() {
-    return makeHeader() + makeBody() + makeHeader();
+    return displayAnyBoard((c) -> toDisplay.whatIsAtForSelf(c));
+  }
+
+  public String displayEnemyBoard() {
+    return displayAnyBoard((c) -> toDisplay.whatIsAtForEnemy(c));
+  }
+
+  protected String displayAnyBoard(Function<Coordinate, Character> getSquareFn) {
+    StringBuilder ans = new StringBuilder();
+    char BaseCharacter = 'A';
+    for (int i = 0; i < toDisplay.getHeight(); i++) {
+      char rowCharacter = (char) (BaseCharacter + i);
+      ans.append(rowCharacter + " ");
+      String sep = "";
+      for (int j = 0; j < toDisplay.getWidth(); j++) {
+        ans.append(sep);
+        Coordinate c = new Coordinate(i, j);
+        Character info = getSquareFn.apply(c);
+        if (info != null) {
+          ans.append(info);
+        } else {
+          ans.append(" ");
+        }
+        sep = "|";
+      }
+      ans.append(" " + rowCharacter + "\n");
+    }
+    return makeHeader() + ans.toString() + makeHeader();
   }
 
   /**
@@ -51,32 +80,5 @@ public class BoardTextView {
     return ans.toString();
   }
 
-  /**
-   * This makes the body, e.g. "A | | A\n" + "B | | B\n"
-   * 
-   * @return the String that is the body for the given board
-   */
-  String makeBody() {
-    StringBuilder ans = new StringBuilder();
-    char BaseCharacter = 'A';
-    for (int i = 0; i < toDisplay.getHeight(); i++) {
-      char rowCharacter = (char) (BaseCharacter + i);
-      ans.append(rowCharacter + " ");
-      String sep = "";
-      for (int j = 0; j < toDisplay.getWidth(); j++) {
-        ans.append(sep);
-        Coordinate c = new Coordinate(i, j);
-        Character info = toDisplay.whatIsAt(c);
-        if (info != null) {
-          ans.append(info);
-        } else {
-          ans.append(" ");
-        }
-        sep = "|";
-      }
-      ans.append(" " + rowCharacter + "\n");
-    }
-    return ans.toString();
-  }
 
 }

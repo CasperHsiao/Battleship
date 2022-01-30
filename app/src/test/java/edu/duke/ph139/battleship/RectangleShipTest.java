@@ -33,7 +33,8 @@ public class RectangleShipTest {
     Coordinate cTest = new Coordinate(1, 2);
     Ship<Character> s1 = new RectangleShip<>("submarine", cTest, 1, 3, 's', '*');
     ShipDisplayInfo<Character> subDisp = new SimpleShipDisplayInfo<Character>('s', '*');
-    Ship<Character> s2 = new RectangleShip<>("submarine", cTest, 1, 3, subDisp);
+    ShipDisplayInfo<Character> subDispEnemy = new SimpleShipDisplayInfo<Character>('*', 's');
+    Ship<Character> s2 = new RectangleShip<>("submarine", cTest, 1, 3, subDisp, subDispEnemy);
     HashSet<Coordinate> expected = new HashSet<>();
     expected.add(new Coordinate(1, 2));
     expected.add(new Coordinate(2, 2));
@@ -52,8 +53,10 @@ public class RectangleShipTest {
     s1.recordHitAt(hitCoord);
     assertEquals(true, s1.wasHitAt(hitCoord));
     assertEquals(false, s1.isSunk());
-    assertEquals('*', s1.getDisplayInfoAt(hitCoord));
-    assertEquals('s', s1.getDisplayInfoAt(new Coordinate(2, 2)));
+    assertEquals('*', s1.getDisplayInfoAt(hitCoord, true));
+    assertEquals('s', s1.getDisplayInfoAt(hitCoord, false));
+    assertEquals('s', s1.getDisplayInfoAt(new Coordinate(2, 2), true));
+    assertEquals(null, s1.getDisplayInfoAt(new Coordinate(2, 2), false));
     
     s1.recordHitAt(new Coordinate(2, 2));
     s1.recordHitAt(new Coordinate(3, 2));

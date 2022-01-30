@@ -11,7 +11,7 @@ public class V1ShipFactoryTest {
     assertEquals(testShip.getName(), expectedName);
     for (Coordinate c : expectedLocs) {
       assertEquals(true, testShip.occupiesCoordinates(c));
-      assertEquals(expectedLetter, testShip.getDisplayInfoAt(c));
+      assertEquals(expectedLetter, testShip.getDisplayInfoAt(c, true));
     }
   }
 

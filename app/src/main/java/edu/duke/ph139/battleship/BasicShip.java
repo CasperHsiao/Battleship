@@ -2,15 +2,17 @@ package edu.duke.ph139.battleship;
 import java.util.HashMap;
 
 public abstract class BasicShip<T> implements Ship<T> {
+  protected ShipDisplayInfo<T> enemyDisplayInfo;
   protected ShipDisplayInfo<T> myDisplayInfo;
   protected HashMap<Coordinate, Boolean> myPieces;
 
-  public BasicShip(Iterable<Coordinate> where, ShipDisplayInfo<T> myDisplayInfo) {
+  public BasicShip(Iterable<Coordinate> where, ShipDisplayInfo<T> myDisplayInfo, ShipDisplayInfo<T> enemyDisplayInfo) {
     this.myPieces = new HashMap<>();
     for (Coordinate c : where) {
       this.myPieces.put(c, false);
     }
     this.myDisplayInfo = myDisplayInfo;
+    this.enemyDisplayInfo = enemyDisplayInfo;
   }
 
   protected void checkCoordinateInThisShip(Coordinate c) {
@@ -46,10 +48,14 @@ public abstract class BasicShip<T> implements Ship<T> {
     return myPieces.get(where);
   }
 
+
   @Override
-  public T getDisplayInfoAt(Coordinate where) {
+  public T getDisplayInfoAt(Coordinate where, boolean myShip) {
     checkCoordinateInThisShip(where);
-    return myDisplayInfo.getInfo(where, wasHitAt(where));
+    if (myShip) {
+      return myDisplayInfo.getInfo(where, wasHitAt(where));
+    }
+    return enemyDisplayInfo.getInfo(where, wasHitAt(where));
   }
 
   @Override

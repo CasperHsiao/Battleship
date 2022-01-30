@@ -1,3 +1,4 @@
+
 package edu.duke.ph139.battleship;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -14,8 +15,8 @@ public class BoardTextViewTest {
 
   @Test
   public void test_invalid_board_size() {
-    Board<Character> b1 = new BattleShipBoard<Character>(11, 20);
-    Board<Character> b2 = new BattleShipBoard<Character>(10, 27);
+    Board<Character> b1 = new BattleShipBoard<Character>(11, 20, 'X');
+    Board<Character> b2 = new BattleShipBoard<Character>(10, 27, 'X');
     assertThrows(IllegalArgumentException.class, () -> new BoardTextView(b1));
     assertThrows(IllegalArgumentException.class, () -> new BoardTextView(b2));
   }
@@ -28,7 +29,7 @@ public class BoardTextViewTest {
   }
 
   private void emptyBoardHelper(int w, int h, String expectedHeader, String expectedBody) {
-    Board<Character> b1 = new BattleShipBoard<Character>(w, h);
+    Board<Character> b1 = new BattleShipBoard<Character>(w, h, 'X');
     BoardTextView view = new BoardTextView(b1);
     assertEquals(expectedHeader, view.makeHeader());
     String expected = expectedHeader + expectedBody + expectedHeader;
@@ -44,7 +45,7 @@ public class BoardTextViewTest {
 
   @Test
   public void test_display_non_empty_4by3() {
-    Board<Character> b1 = new BattleShipBoard<>(4, 3);
+    Board<Character> b1 = new BattleShipBoard<>(4, 3, 'X');
     BoardTextView view = new BoardTextView(b1);
     Coordinate c1 = new Coordinate(1, 2);
     Coordinate c2 = new Coordinate(0, 2);
@@ -68,4 +69,29 @@ public class BoardTextViewTest {
     assertEquals(expected, view.displayMyOwnBoard());
     
    }
+
+  @Test
+  public void test_displayEnemyBoard() {
+    Board<Character> b1 = new BattleShipBoard<>(4, 3, 'X');
+    BoardTextView view = new BoardTextView(b1);
+    AbstractShipFactory<Character> f = new V1ShipFactory();
+    Ship<Character> s1 = f.makeSubmarine(new Placement("A0h"));
+    b1.tryAddShip(s1);
+    String expectedHeader = "  0|1|2|3\n";
+    String myView1 =  "A s|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String enemyView1 =  "A  | | |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    assertEquals(expectedHeader + myView1 + expectedHeader, view.displayMyOwnBoard());
+    assertEquals(expectedHeader + enemyView1 + expectedHeader, view.displayEnemyBoard());
+    b1.fireAt(new Coordinate(0, 0));
+    String myView2 =  "A *|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String enemyView2 =  "A s| | |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    assertEquals(expectedHeader + myView2 + expectedHeader, view.displayMyOwnBoard());
+    assertEquals(expectedHeader + enemyView2 + expectedHeader, view.displayEnemyBoard());
+    b1.fireAt(new Coordinate(1, 0));
+    String myView3 =  "A *|s| |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
+    String enemyView3 =  "A s| | |  A\n" + "B X| | |  B\n" + "C  | | |  C\n";
+    assertEquals(expectedHeader + myView3 + expectedHeader, view.displayMyOwnBoard());
+    assertEquals(expectedHeader + enemyView3 + expectedHeader, view.displayEnemyBoard());
+
+  }
 }

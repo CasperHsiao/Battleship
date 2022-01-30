@@ -20,7 +20,7 @@ public class TextPlayerTest {
       String placements) {
     BufferedReader input = new BufferedReader(new StringReader(placements));
     PrintStream output = new PrintStream(bytes, true);
-    Board<Character> b = new BattleShipBoard<>(w, h);
+    Board<Character> b = new BattleShipBoard<>(w, h, 'X');
     AbstractShipFactory<Character> f = new V1ShipFactory();
     return new TextPlayer(b, input, output, f, name);
   }
