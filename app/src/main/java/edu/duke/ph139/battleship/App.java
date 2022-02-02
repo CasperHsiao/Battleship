@@ -45,17 +45,14 @@ public class App {
    * @throws IOException
    */
   public void doAttackingPhase(TextPlayer p1, TextPlayer p2) throws IOException {
-    boolean p1Lost = false;
-    boolean p2Lost = false;
-    while (!p1Lost && !p2Lost) {
-      p1.playOneTurn(p2.theBoard, p2.view, "Player " + p2.name + "'s ocean");
+    while (true) {
+      p1.doAttackingPhase(p2.theBoard, p2.view, "Player " + p2.name + "'s ocean");
       if (p2.theBoard.hasLost()) {
-        p2Lost = true;
         break;
       }
-      p2.playOneTurn(p1.theBoard, p1.view, "Player " + p1.name + "'s ocean");
+      p2.doAttackingPhase(p1.theBoard, p1.view, "Player " + p1.name + "'s ocean");
       if (p1.theBoard.hasLost()) {
-        p1Lost = true;
+        break;
       }
     }
   }
@@ -70,9 +67,11 @@ public class App {
   public void announceWinner(TextPlayer p1, TextPlayer p2) {
     if (p1.theBoard.hasLost()) {
       p2.out.println("Player " + p2.name + " has won!");
-      //p1.out.println("Player " + p2.name + " has won!"); //TODO: Need to check if we print to p1 out
+      // p1.out.println("Player " + p2.name + " has won!"); //TODO: Need to check if
+      // we print to p1 out
     } else {
-      //p2.out.println("Player " + p1.name + " has won!"); //TODO: Need to check if we print to p2 out
+      // p2.out.println("Player " + p1.name + " has won!"); //TODO: Need to check if
+      // we print to p2 out
       p1.out.println("Player " + p1.name + " has won!");
     }
   }

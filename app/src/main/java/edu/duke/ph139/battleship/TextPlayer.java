@@ -115,7 +115,7 @@ public class TextPlayer {
       try {
         doOnePlacement(shipName, shipCreationsFns.get(shipName));
       } catch (IllegalArgumentException e) {
-        out.println(e.getMessage() +"\n");
+        out.println(e.getMessage() + "\n");
         i--;
       }
     }
@@ -130,30 +130,29 @@ public class TextPlayer {
     return new Coordinate(s);
   }
 
-  public void checkCoordinate(Coordinate c, Board<Character> board) {
-    if (c.getRow() < 0 || c.getRow() >= board.getHeight()) {
-      throw new IllegalArgumentException("The coordinate entered is out of bounds.");
-    }
-    if (c.getColumn() < 0 || c.getColumn() >= board.getWidth()) {
-      throw new IllegalArgumentException("The coordinate entered is out of bounds.");
-    }
-  }
 
   public void playOneTurn(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader)
       throws IOException {
+    Coordinate c = readCoordinate("Please enter a coordinate to fire at!\n");
+    String checkResult = enemyBoard.checkCoordinateInBounds(c);
+    if (checkResult != null) {
+      throw new IllegalArgumentException(checkResult);
+    }
+    Ship<Character> s = enemyBoard.fireAt(c);
+    if (s != null) {
+      out.println("You hit a " + s.getName() + "!\n");
+    } else {
+      out.println("You missed!\n");
+    }
+  }
+
+  public void doAttackingPhase(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader) throws IOException {
     out.print("Player " + name + "'s turn:\n");
     out.println(view.displayMyBoardWithEnemyNextToIt(enemyBoardView, "Your ocean", enemyHeader));
     boolean validPlay = false;
     while (!validPlay) {
       try {
-        Coordinate c = readCoordinate("Please enter a coordinate to fire at!\n");
-        checkCoordinate(c, enemyBoard);
-        Ship<Character> s = enemyBoard.fireAt(c);
-        if (s != null) {
-          out.println("You hit a " + s.getName() + "!\n");
-        } else {
-          out.println("You missed!\n");
-        }
+        playOneTurn(enemyBoard, enemyBoardView, enemyHeader);
         validPlay = true;
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage() + "\n");
@@ -161,4 +160,5 @@ public class TextPlayer {
       }
     }
   }
+
 }

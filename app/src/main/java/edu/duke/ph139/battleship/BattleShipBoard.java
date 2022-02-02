@@ -68,6 +68,23 @@ public class BattleShipBoard<T> implements Board<T> {
   }
 
   /**
+   * Checks if the specified Coordinate is inside the Board.
+   * 
+   * @param c is the Coordinate to be checked.
+   * @return the result of the check. Returns null if the Coordinate is inside the
+   *         bounds.
+   */
+  public String checkCoordinateInBounds(Coordinate c) {
+    if (c.getRow() < 0 || c.getRow() >= height) {
+      return "The coordinate entered is out of bounds.";
+    }
+    if (c.getColumn() < 0 || c.getColumn() >= width) {
+      return "The coordinate entered is out of bounds.";
+    }
+    return null;
+  }
+
+  /**
    * Fires/attacks at the specified Coordinate. Returns the Ship object if one is
    * hit at the specified Coordinate. Otherwise, return null.
    * 
