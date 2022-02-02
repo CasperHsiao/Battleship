@@ -8,22 +8,43 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-
 public class App {
   final TextPlayer p1;
   final TextPlayer p2;
 
+  /**
+   * Constructs a battleship game with the specified TextPlayer.
+   * 
+   * @param p1 is player 1 of the game.
+   * @param p2 is player 2 of the game.
+   */
   public App(TextPlayer p1, TextPlayer p2) {
     this.p1 = p1;
     this.p2 = p2;
   }
 
-  public void doPlacementPhase() throws IOException{
+  /**
+   * Runs the placement phase of the battleship game. Lets player 1 play the
+   * placement phase of the game followed by player 2.
+   * 
+   * @throws IOException
+   */
+  public void doPlacementPhase() throws IOException {
     p1.doPlacementPhase();
     p2.doPlacementPhase();
   }
 
-  public void doAttackingPhase(TextPlayer p1, TextPlayer p2) throws IOException{
+  /**
+   * Runs the attacking phase of the battleship game. Lets player 1 play one
+   * attacking turn, and check if player 2 has lost. Then let player 2 play one
+   * attacking turn, and check if player 1 has lost. Repeat this process until one
+   * player has lost.
+   * 
+   * @param p1 player 1 of the game
+   * @param p2 player 2 of the game
+   * @throws IOException
+   */
+  public void doAttackingPhase(TextPlayer p1, TextPlayer p2) throws IOException {
     boolean p1Lost = false;
     boolean p2Lost = false;
     while (!p1Lost && !p2Lost) {
@@ -39,15 +60,28 @@ public class App {
     }
   }
 
+  /**
+   * Announces the winner of the battleship game by checking the boards of the
+   * players.
+   * 
+   * @param p1 player 1 of the game
+   * @param p2 player 2 of the game
+   */
   public void announceWinner(TextPlayer p1, TextPlayer p2) {
     if (p1.theBoard.hasLost()) {
-      System.out.println("Player " + p2.name + " has won!");
+      p2.out.println("Player " + p2.name + " has won!");
+      //p1.out.println("Player " + p2.name + " has won!"); //TODO: Need to check if we print to p1 out
     } else {
-      System.out.println("Player " + p1.name + " has won!");
+      //p2.out.println("Player " + p1.name + " has won!"); //TODO: Need to check if we print to p2 out
+      p1.out.println("Player " + p1.name + " has won!");
     }
   }
-  
-  public static void main(String[] args) throws IOException{
+
+  /**
+   * Runs one battleship game of two TextPlayers. Prints game output to System.out
+   * and reads input from System.in.
+   */
+  public static void main(String[] args) throws IOException {
     Board<Character> b1 = new BattleShipBoard<>(10, 20, 'X');
     Board<Character> b2 = new BattleShipBoard<>(10, 20, 'X');
     AbstractShipFactory<Character> shipFactory = new V1ShipFactory();

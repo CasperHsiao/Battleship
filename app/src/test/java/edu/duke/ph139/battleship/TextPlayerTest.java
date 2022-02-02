@@ -72,17 +72,17 @@ public class TextPlayerTest {
     String dummyHeader = "Player B's ocean";
     p1.playOneTurn(enemy.theBoard, enemy.view, dummyHeader);
     String turnPrompt = "Player A's turn:\n";
-    String boardView1 = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B  | | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n";
+    String boardView1 = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B  | | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n\n";
     String coordPrompt = "Please enter a coordinate to fire at!\n";
-    String invalidCoord = "The coordinate entered is out of bounds.\n";
-    String hitPrompt = "You hit a submarine!\n";
-    String missedPrompt = "You missed!\n";
+    String invalidCoord = "The coordinate entered is out of bounds.\n\n";
+    String hitPrompt = "You hit a submarine!\n\n";
+    String missedPrompt = "You missed!\n\n";
     assertEquals(
         turnPrompt + boardView1 + coordPrompt + invalidCoord + coordPrompt + invalidCoord + coordPrompt + missedPrompt,
         bytes.toString());
     bytes.reset();
     p1.playOneTurn(enemy.theBoard, enemy.view, dummyHeader);
-    String boardView2 = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B X| | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n";
+    String boardView2 = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B X| | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n\n";
     assertEquals(turnPrompt + boardView2 + coordPrompt + hitPrompt, bytes.toString());
     bytes.reset();
 
@@ -107,13 +107,13 @@ public class TextPlayerTest {
     p1.doOnePlacement("Destroyer", (p) -> f.makeDestroyer(p));
     String expectedHeader = "  0|1|2|3\n";
     String expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d| | |  C\n";
-    String expected = expectedHeader + expectedBody + expectedHeader;
+    String expected = expectedHeader + expectedBody + expectedHeader + "\n";
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();
 
     p1.doOnePlacement("Destroyer", (p) -> f.makeDestroyer(p));
     expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d|d|d|d C\n";
-    expected = expectedHeader + expectedBody + expectedHeader;
+    expected = expectedHeader + expectedBody + expectedHeader + "\n";
     assertEquals(prompt + "\n" + expected, bytes.toString());
     bytes.reset();
 
@@ -130,16 +130,16 @@ public class TextPlayerTest {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
     TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 4, 3, "A0V\na1h\nc0v\n");
     assertThrows(EOFException.class, () -> p1.doPlacementPhase());
-    String startPrompt = "Player A: you are going to place the following ships (which are all\nrectangular). For each ship, type the coordinate of the upper left\nside of the ship, followed by either H (for horizontal) or V (for\nvertical).  For example M4H would place a ship horizontally starting\nat M4 and going to the right.  You have\n\n2 \"Submarines\" ships that are 1x2 \n3 \"Destroyers\" that are 1x3\n3 \"Battleships\" that are 1x4\n2 \"Carriers\" that are 1x6\n";
+    String startPrompt = "Player A: you are going to place the following ships (which are all\nrectangular). For each ship, type the coordinate of the upper left\nside of the ship, followed by either H (for horizontal) or V (for\nvertical).  For example M4H would place a ship horizontally starting\nat M4 and going to the right.  You have\n\n2 \"Submarines\" ships that are 1x2 \n3 \"Destroyers\" that are 1x3\n3 \"Battleships\" that are 1x4\n2 \"Carriers\" that are 1x6\n\n";
     String expectedHeader = "  0|1|2|3\n";
     String expectedBodyBefore = "A  | | |  A\n" + "B  | | |  B\n" + "C  | | |  C\n";
-    String expectedBefore = expectedHeader + expectedBodyBefore + expectedHeader;
     String prompt1 = "Player A where do you want to place a Submarine?\n";
+    String expectedBefore = expectedHeader + expectedBodyBefore + expectedHeader + "\n";
     String expectedBodyAfter1 = "A s| | |  A\n" + "B s| | |  B\n" + "C  | | |  C\n";
-    String expectedAfter1 = expectedHeader + expectedBodyAfter1 + expectedHeader;
+    String expectedAfter1 = expectedHeader + expectedBodyAfter1 + expectedHeader + "\n";
     String prompt2 = "Player A where do you want to place a Destroyer?\n";
     String expectedBodyAfter2 = "A s|d|d|d A\n" + "B s| | |  B\n" + "C  | | |  C\n";
-    String expectedAfter2 = expectedHeader + expectedBodyAfter2 + expectedHeader;
+    String expectedAfter2 = expectedHeader + expectedBodyAfter2 + expectedHeader + "\n";
 
     String prompt3 = "Player A where do you want to place a Battleship?\n";
 
@@ -148,11 +148,11 @@ public class TextPlayerTest {
      * "C b|b|b|b C\n"; String expectedAfter3 = expectedHeader + expectedBodyAfter3
      * + expectedHeader;
      */
-    String errMsg = "That placement is invalid: the ship goes off the bottom of the board.\n";
+    String errMsg = "That placement is invalid: the ship goes off the bottom of the board.\n\n";
     assertEquals(
         expectedBefore + startPrompt + prompt1 + expectedAfter1 + prompt2 + expectedAfter2 + prompt3 + errMsg + prompt3,
         bytes.toString());
     bytes.reset();
-
+    
   }
 }

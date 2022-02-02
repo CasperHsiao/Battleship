@@ -14,7 +14,7 @@ public class BoardTextView {
   private final Board<Character> toDisplay;
 
   /**
-   * Constructs a BoardView, given the board it will display.
+   * Constructs a BoardTextView with the specified Board to display.
    * 
    * @param toDisplay is the Board to display.
    * @throws IllegalArgumentException if the board is larger than 10x26.
@@ -27,43 +27,59 @@ public class BoardTextView {
     }
   }
 
+  /**
+   * Constructs the String for the display of self BoardTextView with the enemy's
+   * BoardTextView next to it.
+   * 
+   * @param enemyView   is the enemy's BoardtextView object.
+   * @param myHeader    is the Sting to display above self board view.
+   * @param enemyHeader is the String to display above enemy's board view.
+   * @return the String for the display
+   */
   public String displayMyBoardWithEnemyNextToIt(BoardTextView enemyView, String myHeader, String enemyHeader) {
     StringBuilder sb = new StringBuilder();
     int w = toDisplay.getWidth();
-    for (int i = 0; i < 2*w + 22 - myHeader.length(); i++) {
-      sb.append(" ");
-    }
-
+    sb.append(" ".repeat(2 * w + 22 - myHeader.length()));
     sb.insert(5, myHeader);
     sb.append(enemyHeader + "\n");
     String own = displayMyOwnBoard();
     String enemy = enemyView.displayEnemyBoard();
-    String [] ownLines = own.split("\n");
-    String [] enemyLines = enemy.split("\n");
+    String[] ownLines = own.split("\n");
+    String[] enemyLines = enemy.split("\n");
     for (int i = 0; i < ownLines.length; i++) {
       sb.append(ownLines[i]);
-      for (int j = 0; j < 2*w + 19 - ownLines[i].length(); j++) {
-        sb.append(" ");
-      }
+      sb.append(" ".repeat(2 * w + 19 - ownLines[i].length()));
       sb.append(enemyLines[i] + "\n");
     }
-    
     return sb.toString();
   }
 
   /**
-   * This makes the empty board view for the given boardtoDisplay
+   * Constructs the String for the display of this BoardTextView in the self
+   * perspective.
    * 
-   * @return the String that is the empty board view for the given board
+   * @return the String for the display.
    */
   public String displayMyOwnBoard() {
     return displayAnyBoard((c) -> toDisplay.whatIsAtForSelf(c));
   }
 
+  /**
+   * Constructs the String for the display of this BoardTextView in the enemy's
+   * perspective.
+   * 
+   * @return the String for the display.
+   */
   public String displayEnemyBoard() {
     return displayAnyBoard((c) -> toDisplay.whatIsAtForEnemy(c));
   }
 
+  /**
+   * Constructs the String for the display of this BoardTextView with the
+   * specified function, which indicates the persepctive (self or enemy).
+   * 
+   * @return the String for the display.
+   */
   protected String displayAnyBoard(Function<Coordinate, Character> getSquareFn) {
     StringBuilder ans = new StringBuilder();
     char BaseCharacter = 'A';
@@ -88,11 +104,12 @@ public class BoardTextView {
   }
 
   /**
-   * This makes the header line, e.g. 0|1|2|3|4\n
+   * Constructs the String for the header display of this BoardTextView, e.g.
+   * 0|1|2|3|4\n.
    * 
-   * @return the String that is the header line for the given board
+   * @return the String that is the header line for this board.
    */
-  String makeHeader() {
+  public String makeHeader() {
     StringBuilder ans = new StringBuilder("  "); // README shows two spaces at start
     String sep = "";
     for (int i = 0; i < toDisplay.getWidth(); i++) {
@@ -103,6 +120,5 @@ public class BoardTextView {
     ans.append("\n");
     return ans.toString();
   }
-
 
 }

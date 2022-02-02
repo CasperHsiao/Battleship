@@ -12,10 +12,13 @@ public class BattleShipBoard<T> implements Board<T> {
   final T missInfo;
 
   /**
-   * Constructs a BattleShipBoard with the specified width and height
+   * Constructs a BattleShipBoard with a dimension of the specified width and
+   * height. The default rule checker of this board includes in bounds and no
+   * collision rule.
    * 
-   * @param w is the width of the newly constructed board.
-   * @param h is the height of the newly constructed board.
+   * @param w        is the width of the newly constructed board.
+   * @param h        is the height of the newly constructed board.
+   * @param missInfo is the display info of a missed shot indication.
    * @throws IllegalArgumentException if the width or height is less than or equal
    *                                  to zero.
    */
@@ -23,6 +26,17 @@ public class BattleShipBoard<T> implements Board<T> {
     this(w, h, new InBoundsRuleChecker<>(new NoCollisionRuleChecker<>(null)), missInfo);
   }
 
+  /**
+   * Constructs a BattleShipBoard with a dimension of the specified width and
+   * height.
+   * 
+   * @param w                is the width of the newly constructed board.
+   * @param h                is the height of the newly constructed board.
+   * @param placementChecker is the rule checker object of this board.
+   * @param missInfo         is the display info of a missed shot indication.
+   * @throws IllegalArgumentException if the width or height is less than or equal
+   *                                  to zero.
+   */
   public BattleShipBoard(int w, int h, PlacementRuleChecker<T> placementChecker, T missInfo) {
     if (w <= 0) {
       throw new IllegalArgumentException("BatlleShipBoard's width must be positive but is " + w);
@@ -38,6 +52,12 @@ public class BattleShipBoard<T> implements Board<T> {
     this.missInfo = missInfo;
   }
 
+  /**
+   * Checks if this BattleShipBoard has lost. Returns true if all the ships on
+   * this board has sunk, which is the losing condition. Otherwise, returns false.
+   * 
+   * @return if the board has lost.
+   */
   public boolean hasLost() {
     for (Ship<T> s : myShips) {
       if (!s.isSunk()) {
@@ -47,6 +67,12 @@ public class BattleShipBoard<T> implements Board<T> {
     return true;
   }
 
+  /**
+   * Fires/attacks at the specified Coordinate. Returns the Ship object if one is
+   * hit at the specified Coordinate. Otherwise, return null.
+   * 
+   * @param c is the Coordinate to fire/attack at.
+   */
   public Ship<T> fireAt(Coordinate c) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
@@ -58,6 +84,14 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
   }
 
+  /**
+   * Attemps to add the specified Ship onto the BattleShipBoard. Returns null if
+   * the ship is successfully added. Otherwise, the specified Ship violates the
+   * placementChecker and returns a descriptive error message.
+   * 
+   * @param toAdd is the Ship to add to the board.
+   * @return the result of adding the Ship
+   */
   public String tryAddShip(Ship<T> toAdd) {
     String placementResult = placementChecker.checkPlacement(toAdd, this);
     if (placementResult == null) {
@@ -67,6 +101,15 @@ public class BattleShipBoard<T> implements Board<T> {
     return placementResult;
   }
 
+  /**
+   * Checks what is at the specified Coordinate and returns the appropriate Ship
+   * display info according to the specified perspective (self or enemy).
+   * Otherwise, returns null if there is no Ship at the specified Coordinate.
+   * 
+   * @param where  is the coordinate to check the display info at.
+   * @param isSelf is the self or enemy perspective indication.
+   * @return the display info.
+   */
   protected T whatIsAt(Coordinate where, boolean isSelf) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(where)) {
@@ -74,9 +117,15 @@ public class BattleShipBoard<T> implements Board<T> {
       }
     }
     return null;
-
   }
 
+  /**
+   * Checks what display info is at the specified Coordinate in the enemy's
+   * perspective.
+   * 
+   * @param where is the coordinate to check the display info at.
+   * @return the display info for the enemy's perspective
+   */
   public T whatIsAtForEnemy(Coordinate where) {
     if (enemyMisses.contains(where)) {
       return missInfo;
@@ -84,15 +133,27 @@ public class BattleShipBoard<T> implements Board<T> {
     return whatIsAt(where, false);
   }
 
-  // Does not check if coordinate out of bounds
+  /**
+   * Checks what display info is at the specified Coordinate in the self
+   * perspective.
+   * 
+   * @param where is the coordinate to check the display info at.
+   * @return the display info for the self perspective
+   */
   public T whatIsAtForSelf(Coordinate where) {
     return whatIsAt(where, true);
   }
 
+  /**
+   * @return the width of the BattleShipBoard.
+   */
   public int getWidth() {
     return width;
   }
 
+  /**
+   * @return the height of the BattleShipBoard..
+   */
   public int getHeight() {
     return height;
   }

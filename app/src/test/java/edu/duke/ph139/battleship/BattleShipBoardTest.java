@@ -1,7 +1,9 @@
 
 package edu.duke.ph139.battleship;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -22,6 +24,19 @@ public class BattleShipBoardTest {
 
   }
 
+  @Test
+  public void test_hasLost() {
+    Board<Character> b = new BattleShipBoard<Character>(10, 20, 'X');
+    assertEquals(true, b.hasLost());
+    AbstractShipFactory<Character> f = new V1ShipFactory();
+    Ship<Character> s = f.makeSubmarine(new Placement("A0h"));
+    b.tryAddShip(s);
+    assertEquals(false, b.hasLost());
+    b.fireAt(new Coordinate("A0"));
+    b.fireAt(new Coordinate("A1"));
+    assertEquals(true, b.hasLost());
+  }
+  
   private <T> void checkWhatIsAtBoard(BattleShipBoard<T> b, T[][] expected) {
     for (int i = 0; i < b.getWidth(); i++) {
       for (int j = 0; j < b.getHeight(); j++) {

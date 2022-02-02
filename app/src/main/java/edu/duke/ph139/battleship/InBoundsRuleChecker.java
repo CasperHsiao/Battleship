@@ -2,11 +2,24 @@ package edu.duke.ph139.battleship;
 
 public class InBoundsRuleChecker<T> extends PlacementRuleChecker<T> {
 
-
+  /**
+   * Constructs a InBoundsRuleChecker with the next rule specified.
+   * 
+   * @param next is the next placement rule checker to chain
+   */
   public InBoundsRuleChecker(PlacementRuleChecker<T> next) {
     super(next);
   }
-  
+
+  /**
+   * Checks if the placement of the specified ship on the board satisfies this in
+   * bounds rule.
+   * 
+   * @param theShip  is the ship to be placed.
+   * @param theBoard is the board in which the ship is placed on.
+   * @return the result of the rule checking. Returns null if the placement
+   *         satisfies the rule.
+   */
   @Override
   protected String checkMyRule(Ship<T> theShip, Board<T> theBoard) {
     for (Coordinate c : theShip.getCoordinates()) {
@@ -27,7 +40,5 @@ public class InBoundsRuleChecker<T> extends PlacementRuleChecker<T> {
     }
     return null;
   }
-
-  
 
 }
