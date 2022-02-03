@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 public class V2ShipFactory extends V1ShipFactory {
 
+  /*
   @Override
   protected Ship<Character> createRectangleShip(Placement where, int w, int h, char letter, String name) {
     char orien = where.getOrientation();
@@ -23,8 +24,9 @@ public class V2ShipFactory extends V1ShipFactory {
       }
       coordinateIndex.add(c);
     }
-    return new AdvancedShip<Character>(name, where, letter, ON_HIT, coordinateIndex);
+    return new RectangleShip<Character>(name, where, letter, ON_HIT, coordinateIndex);
   }
+  */
 
   @Override
   public Ship<Character> makeBattleship(Placement where) {

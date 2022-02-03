@@ -53,7 +53,7 @@ public class V2Battleship<T> extends AdvancedShip<T> {
   }
 
   public V2Battleship(String name, Placement where, T data, T onHit) {
-    super(name, where, data, onHit, makeIndexedCoords(where));
+    super(name, data, onHit, makeIndexedCoords(where));
   }
 
   /*

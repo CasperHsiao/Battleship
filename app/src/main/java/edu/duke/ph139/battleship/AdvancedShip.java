@@ -1,19 +1,20 @@
 package edu.duke.ph139.battleship;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 public class AdvancedShip<T> extends BasicShip<T> {
   final String name;
   final ArrayList<Coordinate> coordinateIndex;
 
-  static HashSet<Coordinate> makeCoords(ArrayList<Coordinate> coordinateIndex) {
-    return new HashSet<Coordinate>(coordinateIndex);
+  public AdvancedShip(String name, T data, T onHit, ArrayList<Coordinate> coordinateIndex) {
+    super(coordinateIndex, new SimpleShipDisplayInfo<>(data, onHit),
+        new SimpleShipDisplayInfo<>(null, data));
+    this.name = name;
+    this.coordinateIndex = coordinateIndex;
   }
 
-  public AdvancedShip(String name, Placement where, T data, T onHit, ArrayList<Coordinate> coordinateIndex) {
-    super(makeCoords(coordinateIndex), new SimpleShipDisplayInfo<>(data, onHit),
-        new SimpleShipDisplayInfo<>(null, data));
+  public AdvancedShip(String name,ShipDisplayInfo<T> myDisplayInfo,                      ShipDisplayInfo<T> enemyDisplayInfo, ArrayList<Coordinate> coordinateIndex) {
+    super(coordinateIndex, myDisplayInfo, enemyDisplayInfo);
     this.name = name;
     this.coordinateIndex = coordinateIndex;
   }

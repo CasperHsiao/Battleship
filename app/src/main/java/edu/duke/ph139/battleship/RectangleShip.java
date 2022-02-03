@@ -1,10 +1,10 @@
 package edu.duke.ph139.battleship;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 
-public class RectangleShip<T> extends BasicShip<T> {
-  final String name;
-
+public class RectangleShip<T> extends AdvancedShip<T> {
+  
   /**
    * Constrcuts a set of Coordinates corresponding the RectangleShip with the
    * specified upper left corner Coordinate, width and height.
@@ -14,6 +14,7 @@ public class RectangleShip<T> extends BasicShip<T> {
    * @param height    is the height of the RectangleShip.
    * @return the set of Coordinates corresponding to the RectangleShip.
    */
+  
   static HashSet<Coordinate> makeCoords(Coordinate upperLeft, int width, int height) {
     HashSet<Coordinate> shipCoordinates = new HashSet<>();
     int row = upperLeft.getRow();
@@ -25,6 +26,26 @@ public class RectangleShip<T> extends BasicShip<T> {
       }
     }
     return shipCoordinates;
+  }
+
+  static ArrayList<Coordinate> makeIndexedCoords(Coordinate upperLeft, int width, int height) {
+    ArrayList<Coordinate> coordinateIndex = new ArrayList<>();
+    int ULR = upperLeft.getRow();
+    int ULC = upperLeft.getColumn();
+    if (width >= height) { //square or horizontal oriented
+      for (int i = 0; i < height; i++) {
+        for (int j = 0; j < width; j++) {
+          coordinateIndex.add(new Coordinate(ULR + i, ULC + j));
+        }
+      }
+    } else {
+      for (int j = 0; j < width; j++) {
+        for (int i = 0; i < height; i++) {
+          coordinateIndex.add(new Coordinate(ULR + i, ULC + width - 1 - j));
+        }
+      }
+    }
+    return coordinateIndex;
   }
 
   /**
@@ -40,8 +61,7 @@ public class RectangleShip<T> extends BasicShip<T> {
    */
   public RectangleShip(String name, Coordinate upperLeft, int width, int height, ShipDisplayInfo<T> myDisplayInfo,
       ShipDisplayInfo<T> enemyDisplayInfo) {
-    super(makeCoords(upperLeft, width, height), myDisplayInfo, enemyDisplayInfo);
-    this.name = name;
+    super(name, myDisplayInfo, enemyDisplayInfo, makeIndexedCoords(upperLeft, width, height));
   }
 
   /**
@@ -56,8 +76,7 @@ public class RectangleShip<T> extends BasicShip<T> {
    * @param onHit     is the display data for the ship when its hit.
    */
   public RectangleShip(String name, Coordinate upperLeft, int width, int height, T data, T onHit) {
-    this(name, upperLeft, width, height, new SimpleShipDisplayInfo<>(data, onHit),
-        new SimpleShipDisplayInfo<>(null, data));
+    super(name, data, onHit, makeIndexedCoords(upperLeft, width, height));
   }
 
   /**

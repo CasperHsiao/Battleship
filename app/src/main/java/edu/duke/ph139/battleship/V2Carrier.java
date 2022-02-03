@@ -45,7 +45,7 @@ public class V2Carrier<T> extends AdvancedShip<T> {
   }
 
   public V2Carrier(String name, Placement where, T data, T onHit) {
-    super(name, where, data, onHit, makeIndexedCoords(where));
+    super(name, data, onHit, makeIndexedCoords(where));
   }
 
   /*
