@@ -165,4 +165,7 @@ public class TextPlayer {
     }
   }
 
+  public boolean hasLost() {
+    return theBoard.allSunk();
+  }
 }

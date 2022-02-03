@@ -9,5 +9,5 @@ public interface Board<T>{
   public Ship<T> fireAt(Coordinate c);
   public Ship<T> selectShip(Coordinate c);
   public T whatIsAtForEnemy(Coordinate where);
-  public boolean hasLost();
+  public boolean allSunk();
 }

@@ -28,14 +28,14 @@ public class BattleShipBoardTest {
   @Test
   public void test_hasLost() {
     Board<Character> b = new BattleShipBoard<Character>(10, 20, 'X');
-    assertEquals(true, b.hasLost());
+    assertEquals(true, b.allSunk());
     AbstractShipFactory<Character> f = new V1ShipFactory();
     Ship<Character> s = f.makeSubmarine(new Placement("A0h"));
     b.tryAddShip(s);
-    assertEquals(false, b.hasLost());
+    assertEquals(false, b.allSunk());
     b.fireAt(new Coordinate("A0"));
     b.fireAt(new Coordinate("A1"));
-    assertEquals(true, b.hasLost());
+    assertEquals(true, b.allSunk());
   }
   
   private <T> void checkWhatIsAtBoard(BattleShipBoard<T> b, T[][] expected) {

@@ -58,7 +58,7 @@ public class BattleShipBoard<T> implements Board<T> {
    * 
    * @return if the board has lost.
    */
-  public boolean hasLost() {
+  public boolean allSunk() {
     for (Ship<T> s : myShips) {
       if (!s.isSunk()) {
         return false;

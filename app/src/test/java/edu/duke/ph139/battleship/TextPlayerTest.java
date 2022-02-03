@@ -158,4 +158,11 @@ public class TextPlayerTest {
     bytes.reset();
 
   }
+
+  @Test
+  public void test_hasLost() {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 4, 3, "");
+    assertEquals(true, p1.hasLost());
+  }
 }
