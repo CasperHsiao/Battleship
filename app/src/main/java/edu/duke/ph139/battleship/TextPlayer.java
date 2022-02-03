@@ -153,14 +153,12 @@ public class TextPlayer {
       throws IOException {
     out.print("Player " + name + "'s turn:\n");
     out.println(view.displayMyBoardWithEnemyNextToIt(enemyBoardView, "Your ocean", enemyHeader));
-    boolean validPlay = false;
-    while (!validPlay) {
+    while (true) {
       try {
         playOneTurn(enemyBoard);
-        validPlay = true;
+        break;
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage() + "\n");
-        validPlay = false;
       }
     }
   }

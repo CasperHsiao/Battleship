@@ -1,64 +1,51 @@
 package edu.duke.ph139.battleship;
 
-import java.util.HashSet;
+import java.util.ArrayList;
 
-public class V2Carrier<T> extends BasicShip<T> {
-  final String name;
+public class V2Carrier<T> extends AdvancedShip<T> {
 
-  static HashSet<Coordinate> makeCoords(Placement where) {
-    HashSet<Coordinate> shipCoordinates = new HashSet<>();
+  static ArrayList<Coordinate> makeIndexedCoords(Placement where) {
+    ArrayList<Coordinate> coordinateIndex = new ArrayList<>();
     int ULR = where.getWhere().getRow();
     int ULC = where.getWhere().getColumn();
     char orien = where.getOrientation();
     if (orien == 'U') {
-      for (int i = 0; i < 3; i++) {
-        shipCoordinates.add(new Coordinate(ULR + 2 + i, ULC + 1));
-      }
       for (int i = 0; i < 4; i++) {
-        shipCoordinates.add(new Coordinate(ULR + i, ULC));
+        coordinateIndex.add(new Coordinate(ULR + i, ULC));
+      }
+      for (int i = 0; i < 3; i++) {
+        coordinateIndex.add(new Coordinate(ULR + 2 + i, ULC + 1));
       }
     } else if (orien == 'D') {
-      for (int i = 0; i < 3; i++) {
-        shipCoordinates.add(new Coordinate(ULR + i, ULC));
-      }
       for (int i = 0; i < 4; i++) {
-        shipCoordinates.add(new Coordinate(ULR + 1 + i, ULC + 1));
+        coordinateIndex.add(new Coordinate(ULR + 4 - i, ULC + 1));
       }
+      for (int i = 0; i < 3; i++) {
+        coordinateIndex.add(new Coordinate(ULR + 2 - i, ULC));
+      }      
     } else if (orien == 'R') {
-      for (int i = 0; i < 3; i++) {
-        shipCoordinates.add(new Coordinate(ULR + 1, ULC + i));
-      }
       for (int i = 0; i < 4; i++) {
-        shipCoordinates.add(new Coordinate(ULR, ULC + 1 + i));
+        coordinateIndex.add(new Coordinate(ULR, ULC + 4 - i));
+      }
+      for (int i = 0; i < 3; i++) {
+        coordinateIndex.add(new Coordinate(ULR + 1, ULC + 2 - i));
       }
     } else if (orien == 'L') {
-      for (int i = 0; i < 3; i++) {
-        shipCoordinates.add(new Coordinate(ULR, ULC + 2 + i));
-      }
       for (int i = 0; i < 4; i++) {
-        shipCoordinates.add(new Coordinate(ULR + 1, ULC + i));
+        coordinateIndex.add(new Coordinate(ULR + 1, ULC + i));
+      }
+      for (int i = 0; i < 3; i++) {
+        coordinateIndex.add(new Coordinate(ULR, ULC + 2 + i));
       }
     } else {
       throw new IllegalArgumentException(
           "This ship's placement's orientation must be (U)p, (R)ight, (D)own, or (L)eft but is " + orien);
     }
-    return shipCoordinates;
-  }
-
-  public V2Carrier(String name, Placement where, ShipDisplayInfo<T> myDisplayInfo,
-      ShipDisplayInfo<T> enemyDisplayInfo) {
-    super(makeCoords(where), myDisplayInfo, enemyDisplayInfo);
-    this.name = name;
+    return coordinateIndex;
   }
 
   public V2Carrier(String name, Placement where, T data, T onHit) {
-    this(name, where, new SimpleShipDisplayInfo<>(data, onHit), new SimpleShipDisplayInfo<>(null, data));
-  }
-
-  @Override
-  public String getName() {
-    return this.name;
-
+    super(name, where, data, onHit, makeIndexedCoords(where));
   }
 
   /*

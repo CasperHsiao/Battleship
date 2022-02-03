@@ -28,7 +28,7 @@ public abstract class BasicShip<T> implements Ship<T> {
    */
   protected void checkCoordinateInThisShip(Coordinate c) {
     if (myPieces.containsKey(c) == false) {
-      throw new IllegalArgumentException();
+      throw new IllegalArgumentException("This ship does not contain the given coordinate.");
     }
   }
 
