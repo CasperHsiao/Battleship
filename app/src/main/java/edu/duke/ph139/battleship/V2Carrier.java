@@ -61,4 +61,18 @@ public class V2Carrier<T> extends BasicShip<T> {
 
   }
 
+  /*
+  @Override
+  public Coordinate getNewPlacementCoordinate(Coordinate c, Placement newPlacement) {
+    Coordinate newUpperLeft = newPlacement.getWhere();
+    Coordinate oldUpperLeft = p.getWhere();
+    int relRowDist = c.getRow() - oldUpperLeft.getRow();
+    int relColDist = c.getColumn() - oldUpperLeft.getColumn();
+    if (newPlacement.getOrientation() == this.p.getOrientation()) {
+      return new Coordinate(newUpperLeft.getRow() + relRowDist, newUpperLeft.getColumn() + relColDist);
+    }
+    return null;
+  }
+  */
+
 }

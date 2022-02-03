@@ -131,8 +131,7 @@ public class TextPlayer {
   }
 
 
-  public void playOneTurn(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader)
-      throws IOException {
+  protected void fireAction(Board<Character> enemyBoard) throws IOException {
     Coordinate c = readCoordinate("Please enter a coordinate to fire at!\n");
     String checkResult = enemyBoard.checkCoordinateInBounds(c);
     if (checkResult != null) {
@@ -146,13 +145,18 @@ public class TextPlayer {
     }
   }
 
-  public void doAttackingPhase(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader) throws IOException {
+  public void playOneTurn(Board<Character> enemyBoard) throws IOException {
+    fireAction(enemyBoard);
+  }
+
+  public void doAttackingPhase(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader)
+      throws IOException {
     out.print("Player " + name + "'s turn:\n");
     out.println(view.displayMyBoardWithEnemyNextToIt(enemyBoardView, "Your ocean", enemyHeader));
     boolean validPlay = false;
     while (!validPlay) {
       try {
-        playOneTurn(enemyBoard, enemyBoardView, enemyHeader);
+        playOneTurn(enemyBoard);
         validPlay = true;
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage() + "\n");

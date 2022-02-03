@@ -2,6 +2,7 @@
 package edu.duke.ph139.battleship;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -89,6 +90,24 @@ public class BattleShipBoardTest {
         { null, null, 's' } };
     checkWhatIsAtBoard(b1, expected);
 
+  }
+
+  @Test
+  public void test_selectShip() {
+    AbstractShipFactory<Character> f = new V2ShipFactory();
+    Board<Character> b = new BattleShipBoard<Character>(10, 20, 'X');
+    Ship<Character> s = f.makeSubmarine(new Placement("A0h"));
+    b.tryAddShip(s);
+    assertEquals(s, b.selectShip(new Coordinate(0, 0)));
+    assertThrows(IllegalArgumentException.class, () -> b.selectShip(new Coordinate (1, 0)));
+  }
+
+  @Test
+  public void test_checkCoordinateInBounds() {
+    Board<Character> b = new BattleShipBoard<Character>(3, 3, 'X');
+    assertNull(b.checkCoordinateInBounds(new Coordinate(0, 0)));
+    assertEquals("The coordinate entered is out of bounds.", b.checkCoordinateInBounds(new Coordinate(-1, 0)));
+    assertEquals("The coordinate entered is out of bounds.", b.checkCoordinateInBounds(new Coordinate(0, -1)));
   }
 
 }

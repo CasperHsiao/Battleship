@@ -14,6 +14,7 @@ public class V2ShipFactory extends V1ShipFactory {
     String name = "carrier";
     return new V2Carrier<>(name, where, data, ON_HIT);
   }
+  
 
   
 }

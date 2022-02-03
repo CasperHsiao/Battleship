@@ -69,5 +69,11 @@ public class RectangleShipTest {
     assertEquals("testship", s1.getName());
   }
 
+  @Test
+  public void test_getNewPlacementCoordinate() {
+    AbstractShipFactory<Character> f = new V2ShipFactory();
+    Ship<Character> sub = f.makeSubmarine(new Placement("B1H"));
+    //assertEquals(new Coordinate(25, 9), sub.getNewPlacementCoordinate(new Coordinate(1, 2), new Placement("Y9v")));
+  }
 
 }

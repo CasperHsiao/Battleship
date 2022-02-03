@@ -101,6 +101,15 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
   }
 
+  public Ship<T> selectShip(Coordinate c) {
+    for (Ship<T> s : myShips) {
+      if (s.occupiesCoordinates(c)) {
+        return s;
+      }
+    }
+    throw new IllegalArgumentException("No ship on the board is at the given Coordinate.");
+  }
+
   /**
    * Attemps to add the specified Ship onto the BattleShipBoard. Returns null if
    * the ship is successfully added. Otherwise, the specified Ship violates the
