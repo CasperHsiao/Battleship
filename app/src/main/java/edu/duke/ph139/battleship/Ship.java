@@ -67,4 +67,7 @@ public interface Ship<T> {
    */
   public Iterable<Coordinate> getCoordinates();
 
+  public Coordinate getShipCoordinateByIndex(int idx);
+
+  public int getIndexOfShipCoordinate(Coordinate c);
 }

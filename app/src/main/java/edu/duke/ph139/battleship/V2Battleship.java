@@ -2,7 +2,8 @@ package edu.duke.ph139.battleship;
 
 import java.util.ArrayList;
 
-public class V2Battleship<T> extends AdvancedShip<T> {
+public class V2Battleship<T> extends BasicShip<T> {
+  final String name;
   
   static ArrayList<Coordinate> makeIndexedCoords(Placement where) {
     ArrayList<Coordinate> coordinateIndex = new ArrayList<>();
@@ -53,20 +54,16 @@ public class V2Battleship<T> extends AdvancedShip<T> {
   }
 
   public V2Battleship(String name, Placement where, T data, T onHit) {
-    super(name, data, onHit, makeIndexedCoords(where));
+    super(new SimpleShipDisplayInfo<>(data, onHit), new SimpleShipDisplayInfo<>(null, data), makeIndexedCoords(where));
+    this.name = name;
   }
 
-  /*
+  
+  /**
+   * @return the name of the RectangleShip.
+   */
   @Override
-  public Coordinate getNewPlacementCoordinate(Coordinate c, Placement newPlacement) {
-    Coordinate newUpperLeft = newPlacement.getWhere();
-    Coordinate oldUpperLeft = p.getWhere();
-    int relRowDist = c.getRow() - oldUpperLeft.getRow();
-    int relColDist = c.getColumn() - oldUpperLeft.getColumn();
-    if (newPlacement.getOrientation() == this.p.getOrientation()) {
-      return new Coordinate(newUpperLeft.getRow() + relRowDist, newUpperLeft.getColumn() + relColDist);
-    }
-    return null;
+  public String getName() {
+    return name;
   }
-  */
 }

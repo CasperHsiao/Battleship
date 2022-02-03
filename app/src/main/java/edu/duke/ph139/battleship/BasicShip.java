@@ -1,23 +1,26 @@
 package edu.duke.ph139.battleship;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public abstract class BasicShip<T> implements Ship<T> {
   protected ShipDisplayInfo<T> enemyDisplayInfo;
   protected ShipDisplayInfo<T> myDisplayInfo;
+  protected ArrayList<Coordinate> coordinateIndex;
   protected HashMap<Coordinate, Boolean> myPieces;
 
   /**
    * Constructs a BasicShip with the specified collection of Coordinates, self
    * display info and enemy display info of the ship.
    */
-  public BasicShip(Iterable<Coordinate> where, ShipDisplayInfo<T> myDisplayInfo, ShipDisplayInfo<T> enemyDisplayInfo) {
+  public BasicShip(ShipDisplayInfo<T> myDisplayInfo, ShipDisplayInfo<T> enemyDisplayInfo, ArrayList<Coordinate> coordinateIndex) {
     this.myPieces = new HashMap<>();
-    for (Coordinate c : where) {
+    for (Coordinate c : coordinateIndex) {
       this.myPieces.put(c, false);
     }
     this.myDisplayInfo = myDisplayInfo;
     this.enemyDisplayInfo = enemyDisplayInfo;
+    this.coordinateIndex = coordinateIndex;
   }
 
   /**
@@ -27,8 +30,8 @@ public abstract class BasicShip<T> implements Ship<T> {
    * @throws IllegalArgumentException if the Coordinate is not in this Shio.
    */
   protected void checkCoordinateInThisShip(Coordinate c) {
-    if (myPieces.containsKey(c) == false) {
-      throw new IllegalArgumentException("This ship does not contain the given coordinate.");
+    if (occupiesCoordinates(c) == false) {
+      throw new IllegalArgumentException("This ship does not occupy the given coordinate.");
     }
   }
 
@@ -115,4 +118,17 @@ public abstract class BasicShip<T> implements Ship<T> {
     return myPieces.keySet();
   }
 
+  @Override
+  public Coordinate getShipCoordinateByIndex(int idx) {
+    if (idx >= coordinateIndex.size()) {
+      throw new IllegalArgumentException("The requested index does not exist on this ship.");
+    }
+    return coordinateIndex.get(idx);
+  }
+
+  @Override
+  public int getIndexOfShipCoordinate(Coordinate c) {
+    checkCoordinateInThisShip(c);
+    return coordinateIndex.indexOf(c);
+  }
 }

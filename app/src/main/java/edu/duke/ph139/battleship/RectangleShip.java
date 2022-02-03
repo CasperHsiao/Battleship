@@ -1,33 +1,10 @@
 package edu.duke.ph139.battleship;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
-public class RectangleShip<T> extends AdvancedShip<T> {
+public class RectangleShip<T> extends BasicShip<T> {
+  final String name; 
   
-  /**
-   * Constrcuts a set of Coordinates corresponding the RectangleShip with the
-   * specified upper left corner Coordinate, width and height.
-   * 
-   * @param upperLeft is the Coordinate of the RectangleShip's upper left corner.
-   * @param width     is the width of the RectangleShip.
-   * @param height    is the height of the RectangleShip.
-   * @return the set of Coordinates corresponding to the RectangleShip.
-   */
-  
-  static HashSet<Coordinate> makeCoords(Coordinate upperLeft, int width, int height) {
-    HashSet<Coordinate> shipCoordinates = new HashSet<>();
-    int row = upperLeft.getRow();
-    int col = upperLeft.getColumn();
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < height; j++) {
-        Coordinate c = new Coordinate(row + j, col + i);
-        shipCoordinates.add(c);
-      }
-    }
-    return shipCoordinates;
-  }
-
   static ArrayList<Coordinate> makeIndexedCoords(Coordinate upperLeft, int width, int height) {
     ArrayList<Coordinate> coordinateIndex = new ArrayList<>();
     int ULR = upperLeft.getRow();
@@ -61,7 +38,8 @@ public class RectangleShip<T> extends AdvancedShip<T> {
    */
   public RectangleShip(String name, Coordinate upperLeft, int width, int height, ShipDisplayInfo<T> myDisplayInfo,
       ShipDisplayInfo<T> enemyDisplayInfo) {
-    super(name, myDisplayInfo, enemyDisplayInfo, makeIndexedCoords(upperLeft, width, height));
+    super(myDisplayInfo, enemyDisplayInfo, makeIndexedCoords(upperLeft, width, height));
+    this.name = name;
   }
 
   /**
@@ -76,7 +54,8 @@ public class RectangleShip<T> extends AdvancedShip<T> {
    * @param onHit     is the display data for the ship when its hit.
    */
   public RectangleShip(String name, Coordinate upperLeft, int width, int height, T data, T onHit) {
-    super(name, data, onHit, makeIndexedCoords(upperLeft, width, height));
+    super(new SimpleShipDisplayInfo<>(data, onHit), new SimpleShipDisplayInfo<>(null, data), makeIndexedCoords(upperLeft, width, height));
+    this.name = name;
   }
 
   /**
