@@ -8,11 +8,13 @@ import java.util.ArrayList;
 
 public class V2TextPlayer extends TextPlayer {
   final MoveShip<Character> moveAction;
+  final SonarScan<Character> sonarAction;
 
   public V2TextPlayer(Board<Character> theBoard, BufferedReader input, PrintStream output,
       AbstractShipFactory<Character> shipFactory, String name) {
     super(theBoard, input, output, shipFactory, name);
     this.moveAction = new MoveShip<>(3);
+    this.sonarAction = new SonarScan<>(3);
   }
 
   protected char readAction(String prompt) throws IOException {
@@ -28,7 +30,7 @@ public class V2TextPlayer extends TextPlayer {
     return s.charAt(0);
   }
   
-  public void moveShip() throws IOException{
+  public void moveShip() throws IOException {
     Coordinate c = readCoordinate("Please select one of your ships to move.\n");
     Ship<Character> toMove = theBoard.selectShip(c);
     if (toMove == null) {
@@ -37,6 +39,16 @@ public class V2TextPlayer extends TextPlayer {
     Placement newPlacement = readPlacement("Where do you want to place the " + toMove.getName() + "?\n");
     Ship<Character> newShip = shipCreationsFns.get(toMove.getName()).apply(newPlacement);
     moveAction.useAction(theBoard, toMove, newShip);
+  }
+
+  public void sonarScan(Board<Character> enemyBoard) throws IOException {
+    Coordinate c = readCoordinate("Please enter a center coordinate for the sonar.\n");
+    String checkResult = enemyBoard.checkCoordinateInBounds(c);
+    if (checkResult != null) {
+      throw new IllegalArgumentException(checkResult);
+    }
+    String result = sonarAction.useAction(enemyBoard, c);
+    out.println(result);
   }
 
   @Override
