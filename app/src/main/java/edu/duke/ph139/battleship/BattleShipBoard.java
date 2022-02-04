@@ -107,12 +107,18 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
   }
 
-  public Ship<T> removeShip(Coordinate c) {
+  public Ship<T> selectShip(Coordinate c) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
-        myShips.remove(s);
         return s;
       }
+    }
+    return null;
+  }
+
+  public Ship<T> removeShip(Ship<T> s) {
+    if (myShips.remove(s)) {
+      return s;
     }
     return null;
   }

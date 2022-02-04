@@ -89,14 +89,13 @@ public class TextPlayer {
    * @throws IllegalArgumentException if tryAddShip, read Placement, or Ship
    *                                  creation fails.
    */
-  public Ship<Character> doOnePlacement(String prompt, Function<Placement, Ship<Character>> createFn) throws IOException {
+  public void doOnePlacement(String prompt, Function<Placement, Ship<Character>> createFn) throws IOException {
     Placement p = readPlacement(prompt);
     Ship<Character> s = createFn.apply(p);
     String addShipResult = theBoard.tryAddShip(s);
     if (addShipResult != null) {
       throw new IllegalArgumentException(addShipResult);
     }
-    return s;
   }
 
   /**

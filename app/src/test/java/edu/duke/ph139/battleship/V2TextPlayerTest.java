@@ -10,6 +10,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.StringReader;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 public class V2TextPlayerTest {
@@ -38,23 +39,21 @@ public class V2TextPlayerTest {
     String expected = expectedHeader + expectedBody + expectedHeader;
     assertEquals(expected, actual);
 
-    p1.moveAction(p1.theBoard);
+    p1.moveShip();
     expectedHeader = "  0|1|2|3\n";
     expectedBody = "A  | |b|  A\n" + "B  |*|b|  B\n" + "C  | |b|  C\n";
     expected = expectedHeader + expectedBody + expectedHeader;
     actual = p1.view.displayMyOwnBoard();
     assertEquals(expected, actual);
 
-    assertThrows(IllegalArgumentException.class, () -> p1.moveAction(p1.theBoard));
+    assertThrows(IllegalArgumentException.class, () -> p1.moveShip());
 
-    assertThrows(IllegalArgumentException.class, () -> p1.moveAction(p1.theBoard));
+    assertThrows(IllegalArgumentException.class, () -> p1.moveShip());
     actual = p1.view.displayMyOwnBoard();
     assertEquals(expected, actual);
-    
-    
-
   }
 
+  
   @Test
   public void test_readAction() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -70,19 +69,19 @@ public class V2TextPlayerTest {
   @Test
   public void test_playOneTurn() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    V2TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 10, 20, "F\nA0\ns\nl\nm\n");
+    V2TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 10, 20, "F\nA0\ns\nl\nM\n");
     Board<Character> b = new BattleShipBoard<Character>(3, 3, 'X');
     AbstractShipFactory<Character> f = new V2ShipFactory();
     b.tryAddShip(f.makeSubmarine(new Placement("A0h")));
     p1.playOneTurn(b);
     String actionPrompt = "Possible actions for Player " + "A"
-        + ":\n\n F Fire at a square\n M Move a ship to another square (" + "0X0X" + " remaining)\n S Sonar scan ("
+        + ":\n\n F Fire at a square\n M Move a ship to another square (" + "3" + " remaining)\n S Sonar scan ("
         + "0X0X" + " remaining)\n\nPlayer " + "A" + ", what would you like to do?\n";
     String firePrompt = "Please enter a coordinate to fire at!\n";
     String hitPrompt = "You hit a Submarine!\n\n";
     assertEquals(actionPrompt + firePrompt + hitPrompt, bytes.toString());
     assertThrows(IllegalArgumentException.class, () -> p1.playOneTurn(b));
     assertThrows(IllegalArgumentException.class, () -> p1.playOneTurn(b));
-    assertThrows(IllegalArgumentException.class, () -> p1.playOneTurn(b));
+    assertThrows(IOException.class, () -> p1.playOneTurn(b));
   }
 }

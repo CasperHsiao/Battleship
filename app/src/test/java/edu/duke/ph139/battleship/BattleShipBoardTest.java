@@ -22,7 +22,6 @@ public class BattleShipBoardTest {
     assertThrows(IllegalArgumentException.class, () -> new BattleShipBoard<Character>(0, 20, 'X'));
     assertThrows(IllegalArgumentException.class, () -> new BattleShipBoard<Character>(10, -5, 'X'));
     assertThrows(IllegalArgumentException.class, () -> new BattleShipBoard<Character>(-8, 20, 'X'));
-
   }
 
   @Test
@@ -68,8 +67,8 @@ public class BattleShipBoardTest {
     assertEquals('s', b.whatIsAtForEnemy(new Coordinate(0, 1)));
 
     // remove the ships
-    assertEquals(s1, b.removeShip(new Coordinate(0, 0)));
-    assertEquals(s2, b.removeShip(new Coordinate(0, 2)));
+    assertEquals(s1, b.removeShip(s1));
+    assertEquals(s2, b.removeShip(s2));
     // check what is at for enemy
     assertEquals('X', b.whatIsAtForEnemy(new Coordinate(1, 0)));
     assertEquals('s', b.whatIsAtForEnemy(new Coordinate(0, 0)));
@@ -118,9 +117,9 @@ public class BattleShipBoardTest {
     Board<Character> b = new BattleShipBoard<Character>(10, 20, 'X');
     Ship<Character> s = f.makeSubmarine(new Placement("A0h"));
     b.tryAddShip(s);
-    assertEquals(null, b.removeShip(new Coordinate(1, 0)));
-    assertEquals(s, b.removeShip(new Coordinate(0, 0)));
-    assertEquals(null, b.removeShip(new Coordinate (0, 0)));
+    assertEquals(s, b.removeShip(s));
+    assertEquals(null, b.removeShip(s));
+
   }
 
   @Test

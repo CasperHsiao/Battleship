@@ -83,10 +83,10 @@ public class App {
   public static void main(String[] args) throws IOException {
     Board<Character> b1 = new BattleShipBoard<>(10, 20, 'X');
     Board<Character> b2 = new BattleShipBoard<>(10, 20, 'X');
-    AbstractShipFactory<Character> shipFactory = new V1ShipFactory();
+    AbstractShipFactory<Character> shipFactory = new V2ShipFactory();
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    TextPlayer p1 = new TextPlayer(b1, input, System.out, shipFactory, "A");
-    TextPlayer p2 = new TextPlayer(b2, input, System.out, shipFactory, "B");
+    V2TextPlayer p1 = new V2TextPlayer(b1, input, System.out, shipFactory, "A");
+    V2TextPlayer p2 = new V2TextPlayer(b2, input, System.out, shipFactory, "B");
     App app = new App(p1, p2);
     app.doPlacementPhase();
     app.doAttackingPhase(p1, p2);
