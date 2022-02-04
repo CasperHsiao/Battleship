@@ -158,6 +158,14 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
   }
 
+  public T whatIsAtForSonar(Coordinate c, T onHit) {
+    T result = whatIsAt(c, true);
+    if (result != null && result.equals(onHit)) {
+      return whatIsAt(c, false);
+    }
+    return result;
+  }
+
   /**
    * Checks what display info is at the specified Coordinate in the enemy's
    * perspective.

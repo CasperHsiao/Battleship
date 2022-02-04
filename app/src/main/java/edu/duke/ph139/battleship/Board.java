@@ -4,6 +4,7 @@ public interface Board<T>{
   public int getWidth();
   public int getHeight();
   public T whatIsAtForSelf(Coordinate where);
+  public T whatIsAtForSonar(Coordinate where, T onHit);
   public String tryAddShip(Ship<T> toAdd);
   public String checkCoordinateInBounds(Coordinate c);
   public Ship<T> fireAt(Coordinate c);

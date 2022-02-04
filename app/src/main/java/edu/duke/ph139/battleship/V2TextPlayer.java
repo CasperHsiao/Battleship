@@ -5,6 +5,7 @@ import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class V2TextPlayer extends TextPlayer {
   final MoveShip<Character> moveAction;
@@ -14,8 +15,19 @@ public class V2TextPlayer extends TextPlayer {
       AbstractShipFactory<Character> shipFactory, String name) {
     super(theBoard, input, output, shipFactory, name);
     this.moveAction = new MoveShip<>(3);
-    this.sonarAction = new SonarScan<>(3);
+    this.sonarAction = new SonarScan<>(3, setupSonarScanMap(), '*');
   }
+
+  protected HashMap<Character, String> setupSonarScanMap() {
+    HashMap<Character, String> shipDispMap = new HashMap<>();
+    shipDispMap.put('s', "Submarine");
+    shipDispMap.put('d', "Destroyer");
+    shipDispMap.put('b', "Battleship");
+    shipDispMap.put('c', "Carrier");
+    return shipDispMap;
+  }
+
+  
 
   protected char readAction(String prompt) throws IOException {
     out.print(prompt);

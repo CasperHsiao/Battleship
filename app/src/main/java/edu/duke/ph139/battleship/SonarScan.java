@@ -1,10 +1,17 @@
 package edu.duke.ph139.battleship;
 
+import java.util.HashMap;
+
 public class SonarScan<T> {
   final int movesLeft;
+  final HashMap<T, String> shipDispMap;
+  final T onHit;
+  final static int SCAN_RADIUS = 3;
 
-  public SonarScan(int n) {
+  public SonarScan(int n, HashMap<T, String> shipDispMap, T onHit) {
     this.movesLeft = n;
+    this.shipDispMap = shipDispMap;
+    this.onHit = onHit;
   }
 
   public String useAction(Board<T> enemyBoard, Coordinate c) {
@@ -12,33 +19,39 @@ public class SonarScan<T> {
     int desCount = 0;
     int batCount = 0;
     int carCount = 0;
-    int row = c.getRow();
-    int col = c.getColumn();
-    for (int i = 0; i <= 3; i++) {
-      int scanR = row - (3 - i);
-      int scanC = col - i;
-      for (int j = 0; j < i * 2 + 1; j++) {
-        Coordinate scanCoord = new Coordinate(scanR, scanC + j);
+    StringBuilder sb = new StringBuilder();
+    for (int i = 0; i <= 2 * SCAN_RADIUS; i++) {
+      int drow = i - SCAN_RADIUS;
+      int dcol = Math.abs(i - SCAN_RADIUS) - SCAN_RADIUS;
+      int n = 2 * (SCAN_RADIUS - Math.abs(i - SCAN_RADIUS));
+      for (int j = 0; j <= n; j++) {
+        Coordinate scanCoord = new Coordinate(c.getRow() + drow, c.getColumn() + dcol + j);
         System.out.print(scanCoord);
+        T disp = enemyBoard.whatIsAtForSonar(scanCoord, onHit);
+        if (disp == null) {
+          continue;
+        }
+        String info = shipDispMap.get(disp);
+        if (info.equals("Submarine")) {
+          subCount++;
+        } else if (info.equals("Destroyer")) {
+          desCount++;
+        } else if (info.equals("Battleship")) {
+          batCount++;
+        } else if (info.equals("Carrier")) {
+          carCount++;
+        }
       }
-      System.out.println("");
-    }
-    for (int i = 0; i < 3; i++) {
-      int scanR = row + 1 + i;
-      int scanC = col - (2 - i);
-      for (int j = 0; j < 2 * (2 - i) + 1; j++) {
-        Coordinate scanCoord = new Coordinate(scanR, scanC + j);
-        System.out.print(scanCoord);
-      }
-      System.out.println("");
     }
     
+    String result = "Submarines occupy " + subCount + " squares\nDestroyers occupy " + desCount
+      + " squares\nBattleships occupy " + batCount + " squares\nCarriers occupy " + carCount + " square\n";
 
-    String result = "Submarines occupy " + subCount + " squares\nDestroyers occupy " + desCount + " squares\nBattleships occupy " + batCount + " squares\nCarriers occupy " + carCount + " square\n";
-    return null;
+    return result;
   }
 
   public int getMovesLeft() {
     return movesLeft;
   }
+
 }
