@@ -37,7 +37,7 @@ public class V1ShipFactory implements AbstractShipFactory<Character> {
     int width = 1;
     int height = 2;
     char data = 's';
-    String name = "submarine";
+    String name = "Submarine";
     return createRectangleShip(where, width, height, data, name);
   }
 
@@ -52,7 +52,7 @@ public class V1ShipFactory implements AbstractShipFactory<Character> {
     int width = 1;
     int height = 4;
     char data = 'b';
-    String name = "battleship";
+    String name = "Battleship";
     return createRectangleShip(where, width, height, data, name);
   }
 
@@ -67,7 +67,7 @@ public class V1ShipFactory implements AbstractShipFactory<Character> {
     int width = 1;
     int height = 6;
     char data = 'c';
-    String name = "carrier";
+    String name = "Carrier";
     return createRectangleShip(where, width, height, data, name);
   }
 
@@ -82,7 +82,7 @@ public class V1ShipFactory implements AbstractShipFactory<Character> {
     int width = 1;
     int height = 3;
     char data = 'd';
-    String name = "destroyer";
+    String name = "Destroyer";
     return createRectangleShip(where, width, height, data, name);
   }
 

@@ -19,14 +19,14 @@ public class V1ShipFactoryTest {
   public void test_all_ship_make() {
     AbstractShipFactory<Character> f = new V1ShipFactory();
     Ship<Character> sub = f.makeSubmarine(new Placement("A1V"));
-    checkShip(sub, "submarine", 's', new Coordinate(0, 1), new Coordinate(1, 1));
+    checkShip(sub, "Submarine", 's', new Coordinate(0, 1), new Coordinate(1, 1));
     Ship<Character> bat = f.makeBattleship(new Placement("B8H"));
-    checkShip(bat, "battleship", 'b', new Coordinate(1, 8), new Coordinate(1, 9), new Coordinate(1, 10),
+    checkShip(bat, "Battleship", 'b', new Coordinate(1, 8), new Coordinate(1, 9), new Coordinate(1, 10),
         new Coordinate(1, 11));
     Ship<Character> des = f.makeDestroyer(new Placement("z6h"));
-    checkShip(des, "destroyer", 'd', new Coordinate(25, 6), new Coordinate(25, 7), new Coordinate(25, 8));
+    checkShip(des, "Destroyer", 'd', new Coordinate(25, 6), new Coordinate(25, 7), new Coordinate(25, 8));
     Ship<Character> car = f.makeCarrier(new Placement("e3v"));
-    checkShip(car, "carrier", 'c', new Coordinate(4, 3), new Coordinate(5, 3), new Coordinate(6, 3),
+    checkShip(car, "Carrier", 'c', new Coordinate(4, 3), new Coordinate(5, 3), new Coordinate(6, 3),
         new Coordinate(7, 3), new Coordinate(8, 3), new Coordinate(9, 3));
   }
 

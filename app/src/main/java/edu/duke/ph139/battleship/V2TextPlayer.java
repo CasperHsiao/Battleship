@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.EOFException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.util.ArrayList;
 
 public class V2TextPlayer extends TextPlayer {
   public V2TextPlayer(Board<Character> theBoard, BufferedReader input, PrintStream output,
@@ -25,12 +26,33 @@ public class V2TextPlayer extends TextPlayer {
     return s.charAt(0);
   }
 
-  /*
+  
   protected void moveAction(Board<Character> theBoard1) throws IOException{
     Coordinate c = readCoordinate("Please select one of your ships to move.\n");
-    Ship<Character> s = theBoard1.selectShip(c);
+    Ship<Character> oldShip = theBoard1.removeShip(c);
+    if (oldShip == null) {
+      throw new IllegalArgumentException("No ship occupies the given coordinate!.");
+    }
+    String prompt = "Where do you want to place the " + oldShip.getName() + "?\n";
+    try {
+      Ship<Character> newShip = doOnePlacement(prompt, shipCreationsFns.get(oldShip.getName()));
+      ArrayList<Integer> hits = new ArrayList<>();
+      for (Coordinate shipCoord : oldShip.getCoordinates()) {
+        if (oldShip.wasHitAt(shipCoord)) {
+          hits.add(oldShip.getIndexOfShipCoordinate(shipCoord));
+        }
+      }
+      for (Integer idx : hits) {
+        Coordinate oldHit = newShip.getShipCoordinateByIndex(idx);
+        newShip.recordHitAt(oldHit);
+      }
+    } catch (IllegalArgumentException e) {
+      theBoard1.tryAddShip(oldShip);
+      throw e;
+    }
+    
   }
-  */
+
   
   @Override
   public void playOneTurn(Board<Character> enemyBoard) throws IOException {

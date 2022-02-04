@@ -22,21 +22,21 @@ public class V2ShipFactoryTest {
   }
 
   private void checkBattleship(Ship<Character> testShip, Coordinate... expectedLocs) {
-    checkShip(testShip, "battleship", 'b', expectedLocs);
+    checkShip(testShip, "Battleship", 'b', expectedLocs);
   }
 
   private void checkCarrier(Ship<Character> testShip, Coordinate... expectedLocs) {
-    checkShip(testShip, "carrier", 'c', expectedLocs);
+    checkShip(testShip, "Carrier", 'c', expectedLocs);
   }
 
   @Test
   public void test_inherited_ship_make() {
     AbstractShipFactory<Character> f = new V2ShipFactory();
     Ship<Character> sub = f.makeSubmarine(new Placement("A0H"));
-    checkShip(sub, "submarine", 's', new Coordinate(0, 0), new Coordinate(0, 1));
+    checkShip(sub, "Submarine", 's', new Coordinate(0, 0), new Coordinate(0, 1));
     assertThrows(IllegalArgumentException.class, () -> sub.getShipCoordinateByIndex(2));
     Ship<Character> des = f.makeDestroyer(new Placement("X9V"));
-    checkShip(des, "destroyer", 'd', new Coordinate(23, 9), new Coordinate(24, 9), new Coordinate(25, 9));
+    checkShip(des, "Destroyer", 'd', new Coordinate(23, 9), new Coordinate(24, 9), new Coordinate(25, 9));
     assertThrows(IllegalArgumentException.class, () -> des.getShipCoordinateByIndex(3));
   }
 

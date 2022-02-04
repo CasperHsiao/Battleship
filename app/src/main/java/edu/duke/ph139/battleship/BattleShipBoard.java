@@ -1,14 +1,16 @@
 package edu.duke.ph139.battleship;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class BattleShipBoard<T> implements Board<T> {
   private final int width;
   private final int height;
-  private final ArrayList<Ship<T>> myShips;
-  private final PlacementRuleChecker<T> placementChecker;
-  private final HashSet<Coordinate> enemyMisses;
+  final ArrayList<Ship<T>> myShips;
+  final PlacementRuleChecker<T> placementChecker;
+  final HashSet<Coordinate> enemyMisses;
+  final HashMap<Coordinate, T> enemyHits;
   final T missInfo;
 
   /**
@@ -50,6 +52,7 @@ public class BattleShipBoard<T> implements Board<T> {
     this.placementChecker = placementChecker;
     this.enemyMisses = new HashSet<>();
     this.missInfo = missInfo;
+    this.enemyHits = new HashMap<>();
   }
 
   /**
@@ -94,20 +97,24 @@ public class BattleShipBoard<T> implements Board<T> {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
         s.recordHitAt(c);
+        enemyHits.put(c, s.getDisplayInfoAt(c, false));
+        enemyMisses.remove(c);
         return s;
       }
     }
     enemyMisses.add(c);
+    enemyHits.remove(c);
     return null;
   }
 
-  public Ship<T> selectShip(Coordinate c) {
+  public Ship<T> removeShip(Coordinate c) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
+        myShips.remove(s);
         return s;
       }
     }
-    throw new IllegalArgumentException("No ship on the board is at the given Coordinate.");
+    return null;
   }
 
   /**
@@ -156,7 +163,10 @@ public class BattleShipBoard<T> implements Board<T> {
     if (enemyMisses.contains(where)) {
       return missInfo;
     }
-    return whatIsAt(where, false);
+    if (enemyHits.containsKey(where)) {
+      return enemyHits.get(where);
+    }
+    return null;
   }
 
   /**

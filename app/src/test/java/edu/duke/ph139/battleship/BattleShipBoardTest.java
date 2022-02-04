@@ -47,21 +47,41 @@ public class BattleShipBoardTest {
   }
 
   @Test
-  public void test_fireAt() {
+  public void test_fireAt_and_whatIsAtForEnemy() {
     Board<Character> b = new BattleShipBoard<>(3, 5, 'X');
     AbstractShipFactory<Character> f = new V1ShipFactory();
     Ship<Character> s1 = f.makeSubmarine(new Placement("a0h"));
     Ship<Character> s2 = f.makeDestroyer(new Placement("a2v"));
     b.tryAddShip(s1);
     b.tryAddShip(s2);
+    // attack s1
     assertSame(s1, b.fireAt(new Coordinate(0, 0)));
     assertEquals(true, s1.wasHitAt(new Coordinate(0, 0)));
     assertSame(s1, b.fireAt(new Coordinate(0, 1)));
     assertEquals(true, s1.wasHitAt(new Coordinate(0, 1)));
     assertEquals(true, s1.isSunk());
+    // miss s2
     assertEquals(null, b.fireAt(new Coordinate(1, 0)));
+    // check what is at for enemy
     assertEquals('X', b.whatIsAtForEnemy(new Coordinate(1, 0)));
     assertEquals('s', b.whatIsAtForEnemy(new Coordinate(0, 0)));
+    assertEquals('s', b.whatIsAtForEnemy(new Coordinate(0, 1)));
+
+    // remove the ships
+    assertEquals(s1, b.removeShip(new Coordinate(0, 0)));
+    assertEquals(s2, b.removeShip(new Coordinate(0, 2)));
+    // check what is at for enemy
+    assertEquals('X', b.whatIsAtForEnemy(new Coordinate(1, 0)));
+    assertEquals('s', b.whatIsAtForEnemy(new Coordinate(0, 0)));
+    assertEquals('s', b.whatIsAtForEnemy(new Coordinate(0, 1)));
+    // fire at coordinate that was previously hit
+    assertEquals(null, b.fireAt(new Coordinate(0, 0)));
+    assertEquals('X', b.whatIsAtForEnemy(new Coordinate(0, 0)));
+    // fire at coordinate that was previously missed
+    Ship<Character> s3 = f.makeDestroyer(new Placement("B0H"));
+    b.tryAddShip(s3);
+    assertSame(s3, b.fireAt(new Coordinate(1, 0)));
+    assertEquals('d', b.whatIsAtForEnemy(new Coordinate(1, 0)));
   }
   
   @Test
@@ -93,13 +113,14 @@ public class BattleShipBoardTest {
   }
 
   @Test
-  public void test_selectShip() {
+  public void test_removeShip() {
     AbstractShipFactory<Character> f = new V2ShipFactory();
     Board<Character> b = new BattleShipBoard<Character>(10, 20, 'X');
     Ship<Character> s = f.makeSubmarine(new Placement("A0h"));
     b.tryAddShip(s);
-    assertEquals(s, b.selectShip(new Coordinate(0, 0)));
-    assertThrows(IllegalArgumentException.class, () -> b.selectShip(new Coordinate (1, 0)));
+    assertEquals(null, b.removeShip(new Coordinate(1, 0)));
+    assertEquals(s, b.removeShip(new Coordinate(0, 0)));
+    assertEquals(null, b.removeShip(new Coordinate (0, 0)));
   }
 
   @Test

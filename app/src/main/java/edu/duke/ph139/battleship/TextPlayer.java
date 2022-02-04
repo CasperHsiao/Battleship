@@ -89,16 +89,14 @@ public class TextPlayer {
    * @throws IllegalArgumentException if tryAddShip, read Placement, or Ship
    *                                  creation fails.
    */
-  public void doOnePlacement(String shipName, Function<Placement, Ship<Character>> createFn) throws IOException {
-    String prompt = "Player " + name + " where do you want to place a " + shipName + "?\n";
+  public Ship<Character> doOnePlacement(String prompt, Function<Placement, Ship<Character>> createFn) throws IOException {
     Placement p = readPlacement(prompt);
     Ship<Character> s = createFn.apply(p);
     String addShipResult = theBoard.tryAddShip(s);
     if (addShipResult != null) {
       throw new IllegalArgumentException(addShipResult);
     }
-    String output = view.displayMyOwnBoard();
-    out.println(output);
+    return s;
   }
 
   /**
@@ -112,8 +110,10 @@ public class TextPlayer {
         + ": you are going to place the following ships (which are all\nrectangular). For each ship, type the coordinate of the upper left\nside of the ship, followed by either H (for horizontal) or V (for\nvertical).  For example M4H would place a ship horizontally starting\nat M4 and going to the right.  You have\n\n2 \"Submarines\" ships that are 1x2 \n3 \"Destroyers\" that are 1x3\n3 \"Battleships\" that are 1x4\n2 \"Carriers\" that are 1x6\n");
     for (int i = 0; i < shipToPlace.size(); i++) {
       String shipName = shipToPlace.get(i);
+      String prompt = "Player " + name + " where do you want to place a " + shipName + "?\n";
       try {
-        doOnePlacement(shipName, shipCreationsFns.get(shipName));
+        doOnePlacement(prompt, shipCreationsFns.get(shipName));
+        out.println(view.displayMyOwnBoard());
       } catch (IllegalArgumentException e) {
         out.println(e.getMessage() + "\n");
         i--;

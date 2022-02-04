@@ -77,7 +77,7 @@ public class TextPlayerTest {
     String boardView1 = "     Your ocean                           Player B's ocean\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\nA  | | | | | | | | |  A                A  | | | | | | | | |  A\nB  | | | | | | | | |  B                B  | | | | | | | | |  B\nC  | | | | | | | | |  C                C  | | | | | | | | |  C\nD  | | | | | | | | |  D                D  | | | | | | | | |  D\nE  | | | | | | | | |  E                E  | | | | | | | | |  E\nF  | | | | | | | | |  F                F  | | | | | | | | |  F\n  0|1|2|3|4|5|6|7|8|9                    0|1|2|3|4|5|6|7|8|9\n\n";
     String coordPrompt = "Please enter a coordinate to fire at!\n";
     String invalidCoord = "The coordinate entered is out of bounds.\n\n";
-    String hitPrompt = "You hit a submarine!\n\n";
+    String hitPrompt = "You hit a Submarine!\n\n";
     String missedPrompt = "You missed!\n\n";
     assertEquals(
         turnPrompt + boardView1 + coordPrompt + invalidCoord + coordPrompt + invalidCoord + coordPrompt + missedPrompt,
@@ -107,17 +107,17 @@ public class TextPlayerTest {
     TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 4, 3, "A0V\nc1h\na3v\n");
     String prompt = "Player A where do you want to place a Destroyer?";
     AbstractShipFactory<Character> f = new V1ShipFactory();
-    p1.doOnePlacement("Destroyer", (p) -> f.makeDestroyer(p));
+    p1.doOnePlacement(prompt, (p) -> f.makeDestroyer(p));
     String expectedHeader = "  0|1|2|3\n";
     String expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d| | |  C\n";
     String expected = expectedHeader + expectedBody + expectedHeader + "\n";
-    assertEquals(prompt + "\n" + expected, bytes.toString());
+    assertEquals(prompt, bytes.toString());
     bytes.reset();
 
-    p1.doOnePlacement("Destroyer", (p) -> f.makeDestroyer(p));
+    p1.doOnePlacement(prompt, (p) -> f.makeDestroyer(p));
     expectedBody = "A d| | |  A\n" + "B d| | |  B\n" + "C d|d|d|d C\n";
     expected = expectedHeader + expectedBody + expectedHeader + "\n";
-    assertEquals(prompt + "\n" + expected, bytes.toString());
+    assertEquals(prompt, bytes.toString());
     bytes.reset();
 
     assertThrows(IllegalArgumentException.class, () -> p1.doOnePlacement("Destroyer", (p) -> f.makeDestroyer(p)));
