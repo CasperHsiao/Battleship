@@ -5,8 +5,10 @@
 package edu.duke.ph139.battleship;
 
 import java.io.BufferedReader;
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 
 public class App {
   final TextPlayer p1;
@@ -67,13 +69,33 @@ public class App {
   public void announceWinner(TextPlayer p1, TextPlayer p2) {
     if (p1.hasLost()) {
       p2.out.println("Player " + p2.name + " has won!");
-      // p1.out.println("Player " + p2.name + " has won!"); //TODO: Need to check if
-      // we print to p1 out
     } else {
-      // p2.out.println("Player " + p1.name + " has won!"); //TODO: Need to check if
-      // we print to p2 out
       p1.out.println("Player " + p1.name + " has won!");
     }
+  }
+
+  public static TextPlayer promptPlayer(BufferedReader inputReader, PrintStream out, AbstractShipFactory<Character> f, Board<Character> b, String playerName) throws IOException {
+    out.print("Do you want Player " + playerName + " to be a computer? [Y/N]\n");
+    while (true) {
+      try {
+        String s = inputReader.readLine();
+        if (s == null) {
+          throw new EOFException();
+        }
+        s = s.toUpperCase();
+        if (!s.equals("Y") && !s.equals("N")) {
+          throw new IllegalArgumentException("Please enter Y or N.");
+        }
+        if (s.equals("Y")) {
+          return new ComputerPlayer(b, out, f, playerName);
+        } else {
+          return new V2TextPlayer(b, inputReader, out, f, playerName);
+        }
+      } catch (IllegalArgumentException e) {
+        out.println(e.getMessage() + "\n");
+      }
+    }
+    
   }
 
   /**
@@ -85,8 +107,8 @@ public class App {
     Board<Character> b2 = new BattleShipBoard<>(10, 20, 'X');
     AbstractShipFactory<Character> shipFactory = new V2ShipFactory();
     BufferedReader input = new BufferedReader(new InputStreamReader(System.in));
-    V2TextPlayer p1 = new V2TextPlayer(b1, input, System.out, shipFactory, "A");
-    V2TextPlayer p2 = new V2TextPlayer(b2, input, System.out, shipFactory, "B");
+    TextPlayer p1 = promptPlayer(input, System.out, shipFactory, b1, "A");
+    TextPlayer p2 = promptPlayer(input, System.out, shipFactory, b2, "B");
     App app = new App(p1, p2);
     app.doPlacementPhase();
     app.doAttackingPhase(p1, p2);

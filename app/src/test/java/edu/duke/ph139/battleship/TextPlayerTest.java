@@ -18,7 +18,7 @@ public class TextPlayerTest {
 
   private TextPlayer generate_basic_player_for_stringReader(String name, OutputStream bytes, int w, int h,
       String placements) {
-    BufferedReader input = new BufferedReader(new StringReader(placements));
+     BufferedReader input = new BufferedReader(new StringReader(placements));
     PrintStream output = new PrintStream(bytes, true);
     Board<Character> b = new BattleShipBoard<>(w, h, 'X');
     AbstractShipFactory<Character> f = new V1ShipFactory();
@@ -101,6 +101,7 @@ public class TextPlayerTest {
     bytes.reset();
   }
 
+  
   @Test
   public void test_do_one_placement() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
@@ -124,6 +125,7 @@ public class TextPlayerTest {
 
   }
 
+  
   @Test
   /*
    * Test is tied to 1 submarine, 1 destroyer, 1 battleship placement. Battleship
@@ -140,11 +142,11 @@ public class TextPlayerTest {
     String expectedBefore = expectedHeader + expectedBodyBefore + expectedHeader + "\n";
     String expectedBodyAfter1 = "A s| | |  A\n" + "B s| | |  B\n" + "C  | | |  C\n";
     String expectedAfter1 = expectedHeader + expectedBodyAfter1 + expectedHeader + "\n";
-    String prompt2 = "Player A where do you want to place a Destroyer?\n";
-    String expectedBodyAfter2 = "A s|d|d|d A\n" + "B s| | |  B\n" + "C  | | |  C\n";
+    String prompt2 = "Player A where do you want to place a Submarine?\n";
+    String expectedBodyAfter2 = "A s|s|s|  A\n" + "B s| | |  B\n" + "C  | | |  C\n";
     String expectedAfter2 = expectedHeader + expectedBodyAfter2 + expectedHeader + "\n";
 
-    String prompt3 = "Player A where do you want to place a Battleship?\n";
+    String prompt3 = "Player A where do you want to place a Destroyer?\n";
 
     /*
      * String expectedBodyAfter3 = "A s|d|d|d A\n" + "B s| | |  B\n" +

@@ -5,11 +5,14 @@ package edu.duke.ph139.battleship;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.io.StringReader;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -19,7 +22,13 @@ import org.junit.jupiter.api.parallel.Resources;
 
 class AppTest {
 
-  @Disabled
+  @Test
+  public void test_promptPlayer() throws IOException{
+    BufferedReader input = new BufferedReader(new StringReader("l\n\n"));
+    assertThrows(IOException.class, () -> App.promptPlayer(input, System.out, null, null, null));
+  }
+
+  
   @Test
   @ResourceLock(value = Resources.SYSTEM_OUT, mode = ResourceAccessMode.READ_WRITE)
   public void test_main() throws IOException {
@@ -49,4 +58,5 @@ class AppTest {
     String actual = bytes.toString();
     assertEquals(expected, actual);
   }
+  
 }

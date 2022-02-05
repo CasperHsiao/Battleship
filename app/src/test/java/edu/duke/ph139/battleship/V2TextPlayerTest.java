@@ -110,7 +110,7 @@ public class V2TextPlayerTest {
     p1.playOneTurn(b);
     String actionPrompt = "Possible actions for Player " + "A"
         + ":\n\n F Fire at a square\n M Move a ship to another square (" + "3" + " remaining)\n S Sonar scan ("
-        + "0X0X" + " remaining)\n\nPlayer " + "A" + ", what would you like to do?\n";
+        + "3" + " remaining)\n\nPlayer " + "A" + ", what would you like to do?\n";
     String firePrompt = "Please enter a coordinate to fire at!\n";
     String hitPrompt = "You hit a Submarine!\n\n";
     assertEquals(actionPrompt + firePrompt + hitPrompt, bytes.toString());

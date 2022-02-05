@@ -57,10 +57,10 @@ public class TextPlayer {
    * Sets up the ship creation list to define the ships to create for a player.
    */
   protected void setupShipCreationList() {
-    shipToPlace.addAll(Collections.nCopies(1, "Submarine"));
-    shipToPlace.addAll(Collections.nCopies(1, "Destroyer"));
-    shipToPlace.addAll(Collections.nCopies(1, "Battleship"));
-    shipToPlace.addAll(Collections.nCopies(0, "Carrier"));
+    shipToPlace.addAll(Collections.nCopies(2, "Submarine"));
+    shipToPlace.addAll(Collections.nCopies(3, "Destroyer"));
+    shipToPlace.addAll(Collections.nCopies(3, "Battleship"));
+    shipToPlace.addAll(Collections.nCopies(2, "Carrier"));
   }
 
   /**
