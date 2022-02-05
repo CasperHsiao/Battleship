@@ -23,11 +23,44 @@ public class V2TextPlayerTest {
     AbstractShipFactory<Character> f = new V2ShipFactory();
     return new V2TextPlayer(b, input, output, f, name);
   }
+  
+  private String createScanResult(int subCount, int desCount, int batCount, int carCount) {
+    String result = "Submarines occupy " + subCount + " squares\nDestroyers occupy " + desCount
+      + " squares\nBattleships occupy " + batCount + " squares\nCarriers occupy " + carCount + " square\n";
+    return result;
+  }
 
   @Test
-  public void test_moveAction() throws IOException {
+  public void test_sonarScan() throws IOException {
     ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-    V2TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 4, 3, "a1\na1l\na0\na2\na3l");
+    V2TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 4, 3, "a7\nb2\nz0");
+    AbstractShipFactory<Character> f = new V2ShipFactory();
+    Board<Character> b = new BattleShipBoard<Character>(10, 20, '*');
+    BoardTextView view = new BoardTextView(b);
+    b.tryAddShip(f.makeBattleship(new Placement("A0u")));
+    Ship<Character> car = f.makeCarrier(new Placement("c0u"));
+    b.tryAddShip(car);
+    b.tryAddShip(f.makeDestroyer(new Placement("a3h")));
+    b.tryAddShip(f.makeSubmarine(new Placement("b3h")));
+    p1.sonarScan(b);
+    String prompt = "Please enter a center coordinate for the sonar.\n";
+    String expected = createScanResult(0, 2, 0, 0);
+    assertEquals(prompt + expected + "\n", bytes.toString());
+    bytes.reset();
+    car.recordHitAt(new Coordinate(2, 0));
+    car.recordHitAt(new Coordinate(3, 0));
+    p1.sonarScan(b);
+    expected = createScanResult(2, 2, 4, 1);
+    assertEquals(prompt + expected + "\n", bytes.toString());
+    bytes.reset();
+    assertEquals(1, p1.sonarAction.getMovesLeft());
+    assertThrows(IllegalArgumentException.class, () -> p1.sonarScan(b));
+  }
+  
+  @Test
+  public void test_moveShip() throws IOException {
+    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+    V2TextPlayer p1 = generate_basic_player_for_stringReader("A", bytes, 4, 3, "a1\na1l\na0\na2\na3l\nm\n");
     AbstractShipFactory<Character> f = new V2ShipFactory();
     Ship<Character> bat = f.makeBattleship(new Placement("a0u"));
     bat.recordHitAt(new Coordinate(0, 1));
@@ -51,6 +84,7 @@ public class V2TextPlayerTest {
     assertThrows(IllegalArgumentException.class, () -> p1.moveShip());
     actual = p1.view.displayMyOwnBoard();
     assertEquals(expected, actual);
+    assertThrows(IOException.class, () -> p1.playOneTurn(new BattleShipBoard<Character>(10, 20, '*')));
   }
 
   
@@ -81,7 +115,5 @@ public class V2TextPlayerTest {
     String hitPrompt = "You hit a Submarine!\n\n";
     assertEquals(actionPrompt + firePrompt + hitPrompt, bytes.toString());
     assertThrows(IllegalArgumentException.class, () -> p1.playOneTurn(b));
-    assertThrows(IllegalArgumentException.class, () -> p1.playOneTurn(b));
-    assertThrows(IOException.class, () -> p1.playOneTurn(b));
   }
 }

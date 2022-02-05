@@ -158,12 +158,13 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
   }
 
-  public T whatIsAtForSonar(Coordinate c, T onHit) {
-    T result = whatIsAt(c, true);
-    if (result != null && result.equals(onHit)) {
-      return whatIsAt(c, false);
+  public String whatIsAtForSonar(Coordinate c) {
+    for (Ship<T> s : myShips) {
+      if (s.occupiesCoordinates(c)) {
+        return s.getName();
+      }
     }
-    return result;
+    return null;
   }
 
   /**
