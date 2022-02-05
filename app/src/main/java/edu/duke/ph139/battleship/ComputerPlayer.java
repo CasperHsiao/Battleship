@@ -7,8 +7,17 @@ public class ComputerPlayer extends TextPlayer {
   final ArrayList<String> placementCommands;
   int fireAtRow;
   int fireAtColumn;
-  
-  public ComputerPlayer(Board<Character> theBoard, PrintStream out, AbstractShipFactory<Character> shipFactory, String name) {
+
+  /**
+   * Constructs a TextPlayer for the battleship game.
+   * 
+   * @param theBoard    is the player's board.
+   * @param output      is the game output for the other player..
+   * @param shipFactory is the factory to create player's ships.
+   * @param name        is the name of the player.
+   */
+  public ComputerPlayer(Board<Character> theBoard, PrintStream out, AbstractShipFactory<Character> shipFactory,
+      String name) {
     super(theBoard, null, out, shipFactory, name);
     this.placementCommands = new ArrayList<>();
     this.fireAtRow = 0;
@@ -16,6 +25,9 @@ public class ComputerPlayer extends TextPlayer {
     setupPlacementCommands();
   }
 
+  /**
+   * Sets up the placement commands for the computer player.
+   */
   protected void setupPlacementCommands() {
     // Submarine
     this.placementCommands.add("a0h");
@@ -33,7 +45,9 @@ public class ComputerPlayer extends TextPlayer {
     this.placementCommands.add("e2u");
   }
 
-  @Override
+  /**
+   * Lets the computer place all its ships according to the placementCommands.
+   */
   public void doPlacementPhase() {
     for (int i = 0; i < shipToPlace.size(); i++) {
       Placement p = new Placement(placementCommands.get(i));
@@ -43,6 +57,13 @@ public class ComputerPlayer extends TextPlayer {
     }
   }
 
+  /**
+   * Lets the computer to attack the enemy's board in a top down fashion.
+   * 
+   * @param enemyBoard     is the board of the enemy player.
+   * @param enemyBoardView is the board view of the enemy player.
+   * @param enemyHeader    is the enemy board view's header.
+   */
   @Override
   public void doAttackingPhase(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader) {
     int h = enemyBoard.getHeight();
@@ -63,6 +84,12 @@ public class ComputerPlayer extends TextPlayer {
     computerReportHit(ship, coord);
   }
 
+  /**
+   * Lets the computer report the hit result to the enemy's output.
+   * 
+   * @param ship  is the ship that got hit.
+   * @param coord is the coordinate of the fire.
+   */
   protected void computerReportHit(Ship<Character> ship, Coordinate coord) {
     if (ship != null) {
       out.println("Player " + name + " hit your " + ship.getName() + " at " + coord.toString() + "!\n");

@@ -6,10 +6,23 @@ public class SonarScan<T> {
   int movesLeft;
   final static int SCAN_RADIUS = 3;
 
+  /**
+   * Constructs a SonarScan action object for the TextPlayer.
+   * 
+   * @param n is the number of moves for this action.
+   */
   public SonarScan(int n) {
     this.movesLeft = n;
   }
 
+  /**
+   * Executes the move ship action.
+   * 
+   * @param enemyBoard is the board of the enemy player.
+   * @param coordinate is the center of the sonar scan.
+   * @returns the result of the sonar scan, reporting number of squares and types
+   *          of ship occupied.
+   */
   public String useAction(Board<T> enemyBoard, Coordinate c) {
     HashMap<String, Integer> shipCount = new HashMap<>();
     shipCount.put("Submarine", 0);
@@ -29,15 +42,19 @@ public class SonarScan<T> {
         }
         int count = shipCount.get(shipName);
         shipCount.replace(shipName, count + 1);
-        
+
       }
     }
     this.movesLeft--;
-    String result = "Submarines occupy " + shipCount.get("Submarine") + " squares\nDestroyers occupy " + shipCount.get("Destroyer")
-      + " squares\nBattleships occupy " + shipCount.get("Battleship") + " squares\nCarriers occupy " + shipCount.get("Carrier") + " square\n";
+    String result = "Submarines occupy " + shipCount.get("Submarine") + " squares\nDestroyers occupy "
+        + shipCount.get("Destroyer") + " squares\nBattleships occupy " + shipCount.get("Battleship")
+        + " squares\nCarriers occupy " + shipCount.get("Carrier") + " square\n";
     return result;
   }
 
+  /**
+   * @return the number of moves left.
+   */
   public int getMovesLeft() {
     return movesLeft;
   }

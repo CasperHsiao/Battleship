@@ -120,6 +120,14 @@ public class TextPlayer {
     }
   }
 
+  /**
+   * Constructs a Coordinate object by reading a line from the input. Prompts the
+   * player with the specified prompt.
+   * 
+   * @param prompt asks the player to enter a Coordinate.
+   * @return the Coordinate.
+   * @throws IllegalArgumentException if the Coordinate construction fails.
+   */
   public Coordinate readCoordinate(String prompt) throws IOException {
     out.print(prompt);
     String s = inputReader.readLine();
@@ -129,7 +137,12 @@ public class TextPlayer {
     return new Coordinate(s);
   }
 
-
+  /**
+   * Prompts the player to enter a Coordinate to fire at the enemy player's board.
+   * 
+   * @param enemyBoard is the board of the enemy player.
+   * @throws IllegalArgumentException if the Coordinate is out of bounds.
+   */
   protected void fireAction(Board<Character> enemyBoard) throws IOException {
     Coordinate c = readCoordinate("Please enter a coordinate to fire at!\n");
     String checkResult = enemyBoard.checkCoordinateInBounds(c);
@@ -144,10 +157,23 @@ public class TextPlayer {
     }
   }
 
+  /**
+   * Lets the player play one turn by firing at the enemy player's board.
+   * 
+   * @param enemyBoard is the board of the enemy player.
+   */
   public void playOneTurn(Board<Character> enemyBoard) throws IOException {
     fireAction(enemyBoard);
   }
 
+  /**
+   * Lets the player do one attacking phase.
+   * 
+   * @param enemyBoard     is the board of the enemy player.
+   * @param enemyBoardView is the board view of the enemy player.
+   * @param enemyHeader    is the enemy board view's header.
+   * @throws IllegalArgumentException if playOneTurn throws.
+   */
   public void doAttackingPhase(Board<Character> enemyBoard, BoardTextView enemyBoardView, String enemyHeader)
       throws IOException {
     out.print("Player " + name + "'s turn:\n");
@@ -162,6 +188,9 @@ public class TextPlayer {
     }
   }
 
+  /**
+   * @returns if this board has lost.
+   */
   public boolean hasLost() {
     return theBoard.allSunk();
   }

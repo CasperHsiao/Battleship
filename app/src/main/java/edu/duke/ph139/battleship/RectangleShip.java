@@ -4,7 +4,15 @@ import java.util.ArrayList;
 
 public class RectangleShip<T> extends BasicShip<T> {
   final String name; 
-  
+
+
+  /**
+   * Constructs the indexed coordinate of the battleship according to its
+   * placement.
+   * 
+   * @param where is the placement of the ship.
+   * @return the array of indexed coordinates.
+   */
   static ArrayList<Coordinate> makeIndexedCoords(Coordinate upperLeft, int width, int height) {
     ArrayList<Coordinate> coordinateIndex = new ArrayList<>();
     int ULR = upperLeft.getRow();

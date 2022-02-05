@@ -74,7 +74,19 @@ public class App {
     }
   }
 
-  public static TextPlayer promptPlayer(BufferedReader inputReader, PrintStream out, AbstractShipFactory<Character> f, Board<Character> b, String playerName) throws IOException {
+  /**
+   * Prompts the user to choose whether the players will be computer or human.
+   * 
+   * @param inputReader is the user input reader.
+   * @param out         is the game output for user.
+   * @param f           is the factory to create player's ships.
+   * @param playerName  is the name of the player.
+   * @param theBoard    is the player's board.
+   * @return the TextPlayer constructed according to the user's input
+   * @throws IllegalArgumentException if the enter command is not Y or N.
+   */
+  public static TextPlayer promptPlayer(BufferedReader inputReader, PrintStream out, AbstractShipFactory<Character> f,
+      Board<Character> b, String playerName) throws IOException {
     out.print("Do you want Player " + playerName + " to be a computer? [Y/N]\n");
     while (true) {
       try {
@@ -95,7 +107,7 @@ public class App {
         out.println(e.getMessage() + "\n");
       }
     }
-    
+
   }
 
   /**
