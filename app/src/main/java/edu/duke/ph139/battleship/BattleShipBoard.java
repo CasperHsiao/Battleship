@@ -107,6 +107,10 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
   }
 
+  /**
+   * @param c is the coordinate that the selected the ship occupies.
+   * @returns the ship that occupies the coordinate. Otherwise, null.
+   */
   public Ship<T> selectShip(Coordinate c) {
     for (Ship<T> s : myShips) {
       if (s.occupiesCoordinates(c)) {
@@ -116,6 +120,10 @@ public class BattleShipBoard<T> implements Board<T> {
     return null;
   }
 
+  /**
+   * @param ship is the ship to remove.
+   * @returns the ship removed.
+   */
   public Ship<T> removeShip(Ship<T> s) {
     if (myShips.remove(s)) {
       return s;

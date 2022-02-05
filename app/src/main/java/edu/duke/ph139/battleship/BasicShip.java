@@ -13,7 +13,8 @@ public abstract class BasicShip<T> implements Ship<T> {
    * Constructs a BasicShip with the specified collection of Coordinates, self
    * display info and enemy display info of the ship.
    */
-  public BasicShip(ShipDisplayInfo<T> myDisplayInfo, ShipDisplayInfo<T> enemyDisplayInfo, ArrayList<Coordinate> coordinateIndex) {
+  public BasicShip(ShipDisplayInfo<T> myDisplayInfo, ShipDisplayInfo<T> enemyDisplayInfo,
+      ArrayList<Coordinate> coordinateIndex) {
     this.myPieces = new HashMap<>();
     for (Coordinate c : coordinateIndex) {
       this.myPieces.put(c, false);
@@ -118,6 +119,12 @@ public abstract class BasicShip<T> implements Ship<T> {
     return myPieces.keySet();
   }
 
+  /**
+   * @param idx is the coordinate index to check.
+   * @returns the coordinate of the ship according to the given index.
+   * @throws IllegalArgumentException if the index is larger than the number of
+   *                                  ship coordinates.
+   */
   @Override
   public Coordinate getShipCoordinateByIndex(int idx) {
     if (idx >= coordinateIndex.size()) {
@@ -126,6 +133,12 @@ public abstract class BasicShip<T> implements Ship<T> {
     return coordinateIndex.get(idx);
   }
 
+  /**
+   * @param coordinate is the coordinate to check the index.
+   * @returns the index of the given coordinate.
+   * @throws IllegalArgumentException if the coordinate is not occupied by this
+   *                                  ship.
+   */
   @Override
   public int getIndexOfShipCoordinate(Coordinate c) {
     checkCoordinateInThisShip(c);
